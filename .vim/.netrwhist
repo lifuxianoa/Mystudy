@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/disk1/src/linux-2.6.31.6'
+let g:netrw_dirhist_2='/disk1/broadcom/src/BSEAV/lib/media/build'
+let g:netrw_dirhist_3='/opt/nfs/nfsroot/mnt/nv/bin/ipanel_bin/bin/imlib2'

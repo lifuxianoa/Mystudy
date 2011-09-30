@@ -1,0 +1,107 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:568: checking for a BSD compatible install
+configure:621: checking whether build environment is sane
+configure:678: checking whether make sets ${MAKE}
+configure:724: checking for working aclocal
+configure:737: checking for working autoconf
+configure:750: checking for working automake
+configure:763: checking for working autoheader
+configure:776: checking for working makeinfo
+configure:868: checking host system type
+configure:889: checking build system type
+configure:909: checking for ranlib
+configure:939: checking for gcc
+configure:1052: checking whether the C compiler (gcc  ) works
+configure:1068: gcc -o conftest    conftest.c  1>&5
+configure:1094: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:1099: checking whether we are using GNU C
+configure:1127: checking whether gcc accepts -g
+configure:1170: checking for ld used by GCC
+configure:1233: checking if the linker (/usr/bin/ld) is GNU ld
+configure:1249: checking for BSD-compatible nm
+configure:1286: checking whether ln -s works
+ltconfig:601: checking for object suffix
+ltconfig:602: gcc -c -g -O2  conftest.c 1>&5
+ltconfig:732: checking if gcc PIC flag -fPIC works
+ltconfig:733: gcc -c -g -O2 -fPIC -DPIC  conftest.c 1>&5
+ltconfig:785: checking if gcc supports -c -o file.o
+ltconfig:786: gcc -c -g -O2 -o out/conftest2.o  conftest.c 1>&5
+ltconfig:818: checking if gcc supports -c -o file.lo
+ltconfig:819: gcc -c -g -O2 -c -o conftest.lo  conftest.c 1>&5
+ltconfig:870: checking if gcc supports -fno-rtti -fno-exceptions
+ltconfig:871: gcc -c -g -O2 -fno-rtti -fno-exceptions -c conftest.c  conftest.c 1>&5
+ltconfig:914: checking if gcc static flag -static works
+ltconfig:915: gcc -o conftest -g -O2   -static conftest.c  1>&5
+/usr/bin/ld: cannot find -lc
+collect2: ld returned 1 exit status
+GNU ld version 2.19.51.0.14-3.fc11 20090722
+ltconfig:1507: checking if global_symbol_pipe works
+ltconfig:1508: gcc -c -g -O2  conftest.c 1>&5
+ltconfig:1511: eval "/usr/bin/nm -B conftest.o | sed -n -e 's/^.*[ 	]\([ABCDGISTW]\)[ 	][ 	]*\(\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p' > conftest.nm"
+ltconfig:1563: gcc -o conftest -g -O2 -fno-builtin   conftest.c conftstm.o 1>&5
+configure:1478: checking for a BSD compatible install
+configure:1536: checking for gcc
+configure:1649: checking whether the C compiler (gcc  ) works
+configure:1665: gcc -o conftest    conftest.c  1>&5
+configure:1691: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:1696: checking whether we are using GNU C
+configure:1724: checking whether gcc accepts -g
+configure:1763: checking whether make sets ${MAKE}
+configure:1791: checking how to run the C preprocessor
+configure:1871: checking for ANSI C header files
+configure:1979: checking for ctype.h
+configure:1989: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:1979: checking for sys/time.h
+configure:1979: checking for unistd.h
+configure:1979: checking for math.h
+configure:1989: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:2023: checking for X
+configure:2090: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:2166: gcc -o conftest    conftest.c -lXt  1>&5
+configure:2337: checking for dnet_ntoa in -ldnet
+configure:2356: gcc -o conftest    conftest.c -ldnet   1>&5
+/usr/bin/ld: cannot find -ldnet
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 2345 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char dnet_ntoa();
+
+int main() {
+dnet_ntoa()
+; return 0; }
+configure:2378: checking for dnet_ntoa in -ldnet_stub
+configure:2397: gcc -o conftest    conftest.c -ldnet_stub   1>&5
+/usr/bin/ld: cannot find -ldnet_stub
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 2386 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char dnet_ntoa();
+
+int main() {
+dnet_ntoa()
+; return 0; }
+configure:2426: checking for gethostbyname
+configure:2524: checking for connect
+configure:2616: checking for remove
+configure:2644: gcc -o conftest    conftest.c  1>&5
+configure:2708: checking for shmat
+configure:2736: gcc -o conftest    conftest.c  1>&5
+configure:2809: checking for IceConnectionNumber in -lICE
+configure:2828: gcc -o conftest    conftest.c -lICE   1>&5
+configure:2858: checking for GL/glut.h
+configure:2868: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:2864:21: error: GL/glut.h: No such file or directory
+configure: failed program was:
+#line 2863 "configure"
+#include "confdefs.h"
+#include <GL/glut.h>

@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+//#include <sys/types.h>
+#include <sys/socket.h> //socket AF_INET SOCK_STREAM
+#include <netinet/in.h> //sockaddr_in
+#include <arpa/inet.h> // inet_ntop()
+#include <time.h>
+#include <signal.h>
+#include <errno.h>
+
+#include "unp.h"
+
+int main(void)
+{
+    int listenfd, connfd, maxfd, socketfd;
+	int nready, i, n, maxclient, client[FD_SETSIZE];
+    struct sockaddr_in cliaddr, servaddr;
+    char line[MAXLINE];
+    socklen_t len;
+	fd_set rset, allset;
+
+    listenfd = socket(AF_INET, SOCK_STREAM, 0);
+    bzero(&servaddr, sizeof(struct sockaddr_in));
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(13);
+
+    bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+    listen(listenfd, LISTENQ);
+
+    //signal(SIGCHLD, sig_chld);
+
+	maxclient = -1;
+	maxfd = listenfd;
+	FD_ZERO(&allset);
+	FD_SET(listenfd, &allset);
+
+	for(i=0; i<FD_SETSIZE; i++)
+	{
+		client[i] = -1;
+	}
+
+    for(;;)
+    {
+		rset = allset;
+		nready = select(maxfd+1, &rset, NULL, NULL, NULL);
+
+		if(FD_ISSET(listenfd, &rset)) //new client connection
+		{
+ACCEPT:
+			len = sizeof(cliaddr);
+			connfd = accept(listenfd, (struct sockaddr*)&cliaddr, &len);
+        	printf("connection from %s, port %d\n", inet_ntop(AF_INET, &cliaddr.sin_addr, line, MAXLINE), ntohs(cliaddr.sin_port));
+
+			if(connfd < 0)
+			{
+				if(errno == EINTR)
+				{
+					usleep(100*1000);
+					goto ACCEPT;
+					//continue;
+				}
+				else
+				{
+					printf("accept error!\n");
+				}
+			}
+			else
+			{
+				for(i=0; i<FD_SETSIZE; i++)
+				{
+					if(client[i] < 0)
+					{
+						client[i] = connfd; //save connection socket fd
+						break;
+					}
+				}
+				if(i >= FD_SETSIZE)
+				{
+					printf("too many clients!\n");
+					printf("client fd array is full!\n");
+				}
+
+				FD_SET(connfd, &allset);
+				if(connfd > maxfd)
+				{
+					maxfd = connfd;
+				}
+
+				if(i > maxclient)
+				{
+					maxclient = i;
+				}
+
+				if(--nready <= 0)
+				{
+					continue;
+				}
+			}
+		}
+
+		for(i=0; i<=maxclient; i++)
+		{
+			if((socketfd = client[i]) < 0)
+			{
+				continue;
+			}
+
+			if(FD_ISSET(socketfd, &rset))
+			{
+				if( (n=readline(socketfd, line, MAXLINE)) == 0)
+				{
+					// connection closed by server
+					close(socketfd);
+					FD_CLR(socketfd, &allset);
+					client[i] = -1;
+				}
+				else
+				{
+					writen(socketfd, line, n);
+					if(--nready <= 0)
+					{
+						// no more readable descripters
+						break;
+					}
+				}
+			}
+		}
+    }
+
+    return 0;
+}
+

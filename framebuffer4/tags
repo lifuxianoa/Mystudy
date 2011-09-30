@@ -1,0 +1,72 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ACORN8x8_IDX	font.h	30;"	d
+BUTTON_ACTIVE	main.c	22;"	d	file:
+FONTDATAMAX	font_8x16.c	9;"	d	file:
+FONTDATAMAX	font_8x8.c	9;"	d	file:
+MAX_FONT_NAME	font.h	36;"	d
+NR_BUTTONS	main.c	32;"	d	file:
+NR_COLORS	main.c	16;"	d	file:
+PEARL8x8_IDX	font.h	26;"	d
+SRC	Makefile	/^SRC=fbutils.c font_8x16.c font_8x8.c main.c$/;"	m
+SUN12x22_IDX	font.h	29;"	d
+SUN8x16_IDX	font.h	28;"	d
+TARGET	Makefile	/^TARGET=framebuffer$/;"	m
+VGA6x11_IDX	font.h	27;"	d
+VGA8x16_IDX	font.h	25;"	d
+VGA8x8_IDX	font.h	24;"	d
+XORMODE	fbutils.h	22;"	d
+_FBUTILS_H	fbutils.h	14;"	d
+_VIDEO_FONT_H	font.h	12;"	d
+__setpixel	fbutils.c	/^static inline void __setpixel (union multiptr loc, unsigned xormode, unsigned color)$/;"	f	file:
+button_draw	main.c	/^static void button_draw (struct ts_button *button)$/;"	f	file:
+button_palette	main.c	/^static int button_palette [6] =$/;"	v	file:
+buttons	main.c	/^static struct ts_button buttons [NR_BUTTONS];$/;"	v	typeref:struct:ts_button	file:
+bytes_per_pixel	fbutils.c	/^static int bytes_per_pixel;$/;"	v	file:
+close_framebuffer	fbutils.c	/^void close_framebuffer(void)$/;"	f
+colormap	fbutils.c	/^static unsigned colormap [256];$/;"	v	file:
+data	font.h	/^    char *data;$/;"	m	struct:fbcon_font_desc
+fb_fd	fbutils.c	/^static int fb_fd=0;$/;"	v	file:
+fbcon_font_desc	font.h	/^struct fbcon_font_desc {$/;"	s
+fillrect	fbutils.c	/^void fillrect (int x1, int y1, int x2, int y2, unsigned colidx)$/;"	f
+fix	fbutils.c	/^static struct fb_fix_screeninfo fix;$/;"	v	typeref:struct:fb_fix_screeninfo	file:
+flags	main.c	/^	int flags;$/;"	m	struct:ts_button	file:
+font_vga_8x16	font_8x16.c	/^struct fbcon_font_desc font_vga_8x16 = {$/;"	v	typeref:struct:fbcon_font_desc
+font_vga_8x8	font_8x8.c	/^struct fbcon_font_desc font_vga_8x8 = {$/;"	v	typeref:struct:fbcon_font_desc
+fontdata_8x16	font_8x16.c	/^static unsigned char fontdata_8x16[FONTDATAMAX] = {$/;"	v	file:
+fontdata_8x8	font_8x8.c	/^static unsigned char fontdata_8x8[FONTDATAMAX] = {$/;"	v	file:
+h	main.c	/^	int x, y, w, h;$/;"	m	struct:ts_button	file:
+height	font.h	/^    int width, height;$/;"	m	struct:fbcon_font_desc
+idx	font.h	/^    int idx;$/;"	m	struct:fbcon_font_desc
+line	fbutils.c	/^void line (int x1, int y1, int x2, int y2, unsigned colidx)$/;"	f
+line_addr	fbutils.c	/^static unsigned char *line_addr;$/;"	v	file:
+main	main.c	/^int main()$/;"	f
+multiptr	fbutils.c	/^union multiptr {$/;"	u	file:
+name	font.h	/^    char *name;$/;"	m	struct:fbcon_font_desc
+open_framebuffer	fbutils.c	/^int open_framebuffer(void)$/;"	f
+p16	fbutils.c	/^	unsigned short *p16;$/;"	m	union:multiptr	file:
+p32	fbutils.c	/^	unsigned long *p32;$/;"	m	union:multiptr	file:
+p8	fbutils.c	/^	unsigned char *p8;$/;"	m	union:multiptr	file:
+palette	main.c	/^static int palette [] =$/;"	v	file:
+pixel	fbutils.c	/^void pixel (int x, int y, unsigned colidx)$/;"	f
+pref	font.h	/^    int pref;$/;"	m	struct:fbcon_font_desc
+put_char	fbutils.c	/^void put_char(int x, int y, int c, int colidx)$/;"	f
+put_cross	fbutils.c	/^void put_cross(int x, int y, unsigned colidx)$/;"	f
+put_string	fbutils.c	/^void put_string(int x, int y, char *s, unsigned colidx)$/;"	f
+put_string_center	fbutils.c	/^void put_string_center(int x, int y, char *s, unsigned colidx)$/;"	f
+rect	fbutils.c	/^void rect (int x1, int y1, int x2, int y2, unsigned colidx)$/;"	f
+setcolor	fbutils.c	/^void setcolor(unsigned colidx, unsigned value)$/;"	f
+sig	main.c	/^static void sig(int sig)$/;"	f	file:
+text	main.c	/^	char *text;$/;"	m	struct:ts_button	file:
+ts_button	main.c	/^struct ts_button {$/;"	s	file:
+var	fbutils.c	/^static struct fb_var_screeninfo var;$/;"	v	typeref:struct:fb_var_screeninfo	file:
+w	main.c	/^	int x, y, w, h;$/;"	m	struct:ts_button	file:
+width	font.h	/^    int width, height;$/;"	m	struct:fbcon_font_desc
+x	main.c	/^	int x, y, w, h;$/;"	m	struct:ts_button	file:
+xres	fbutils.c	/^__u32 xres, yres;$/;"	v
+y	main.c	/^	int x, y, w, h;$/;"	m	struct:ts_button	file:
+yres	fbutils.c	/^__u32 xres, yres;$/;"	v
