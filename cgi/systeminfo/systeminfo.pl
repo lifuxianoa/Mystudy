@@ -25,7 +25,7 @@ unless (open(FILE, "/sbin/ifconfig|"))
 
 while (<FILE>)
 {
-    if (/\s*inet addr:([\d\.]*)\s*Bcast:([\d\.]*)\s*Mask:([\d\.]*)/)
+    if (/^\s*inet addr:([\d\.]*)\s*Bcast:([\d\.]*)\s*Mask:([\d\.]*)/)
     {
         $host_ip = $1;
         $bcast = $2;
@@ -33,8 +33,23 @@ while (<FILE>)
         print "host_ip:$host_ip\n";
         print "bcast:$bcast\n";
         print "mask:$mask\n";
+        last;
     }
 }
 close (FILE);
 
 
+#获取CPU型号
+unless (open(FILE, "/proc/cpuinfo"))
+{
+    die("cannot open input file /etc/cpuinfo\n");
+}
+while (<FILE>)
+{
+    if (/model name\s*: (.*)$/)
+    {
+        $cpu_type = $1;
+        print "cpu Type:$cpu_type\n";
+        last;
+    }
+}
