@@ -900,3 +900,90 @@ set vb t_vb=
 set fileencodings=utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latinl,cp936
 "set termencoding=utf-8
 "set fileformats=unix
+
+"行号
+set nu
+
+"光标线
+set cursorline
+
+"工作在不兼容模式下
+set nocp
+
+"打开VIM状态栏标尺
+set ru
+
+"搜索时高亮显示被找到的文本
+set hls
+
+"搜索时在未完全输入完毕要检索的文本时就开始检索
+set is
+
+"打开关键字高亮
+syntax on
+
+"Backspace删除
+set backspace=indent,eol,start
+"set backspace=2
+
+"左右到头时自动切换到上下行
+set whichwrap=b,s,<,>,[,] 
+
+"内码使用utf8，优先以utf8尝试解码
+set encoding=utf8
+set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
+
+"自动缩进4个空格
+set sw=4
+
+"Tab宽度4个字符
+set ts=4
+
+"不在单词中间断行
+set lbr
+
+"打开断行模式对亚洲语言支持
+set fo+=mB 
+
+"显示括号配对情况
+set sm
+
+"打开C/C++风格的自动缩进
+set cin
+
+"是否在缩进和遇到 Tab 键时使用空格替代；使用 noexpandtab 取消设置
+set expandtab
+
+"自动缩进，即每行的缩进值与上一行相等；使用 noautoindent 取消设置
+set autoindent
+
+"按BackSpace的时候可以一次删除4个空格
+set softtabstop=4
+
+"检测文件类型
+"filetype on
+
+"检测文件类型插件
+"filetype plugin on
+
+"上下可视行数
+set scrolloff=6
+
+"在行和段开始处使用制表符
+set smarttab
+
+"增强模式中的命令行自动完成操作
+set wildmenu
+
+"打开自动折叠
+"set foldenable
+"set foldmethod=indent
+
+"每一行列数，用于自动换行
+set textwidth=78
+
+set columns=85
+
+"行号宽度
+set numberwidth=5
+
