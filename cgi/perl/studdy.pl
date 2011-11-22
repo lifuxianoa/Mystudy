@@ -55,3 +55,18 @@ open(infile, "outfile");
 print "read all: @allline\n";
 
 print "@ARGV\n";
+
+$~ = "MYFORMAT";
+
+write;
+
+format MYFORMAT=
+============================================================
+Here is the text I want to display.
+============================================================
+.
+
+my $value = 10;
+my $pointer = \$value;
+print "\n Pointer Address $pointer of $value \n";
+print "\n What Pointer *($pointer) points to $$pointer\n";
