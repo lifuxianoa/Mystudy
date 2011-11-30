@@ -1,3 +1,7 @@
-*.o
-test
-fec
+#忽略临时文件
+*.swp
+*.~
+
+#忽略中间生成OBJ LIB文件
+*.[oa]
+.depend
