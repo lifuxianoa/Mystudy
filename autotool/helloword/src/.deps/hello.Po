@@ -1,0 +1,79 @@
+hello.o: hello.c \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/stdio.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/features.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_config.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/sys/cdefs.h \
+  /home/lifuxian/econa/cns3xxx-sdk/tools/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/bin/../lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.3/include/stddef.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/types.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/wordsize.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/typesizes.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/pthreadtypes.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/sched.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_stdio.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/wchar.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/wchar.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_mutex.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/pthread.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/sched.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/time.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/time.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_clk_tck.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/signal.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/sigset.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/initspin.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/sigthread.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_pthread.h \
+  /home/lifuxian/econa/cns3xxx-sdk/tools/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/bin/../lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.3/include/stdarg.h \
+  /opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/stdio_lim.h
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/stdio.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/features.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_config.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/sys/cdefs.h:
+
+/home/lifuxian/econa/cns3xxx-sdk/tools/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/bin/../lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.3/include/stddef.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/types.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/wordsize.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/typesizes.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/pthreadtypes.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/sched.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_stdio.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/wchar.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/wchar.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_mutex.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/pthread.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/sched.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/time.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/time.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_clk_tck.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/signal.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/sigset.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/initspin.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/sigthread.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/uClibc_pthread.h:
+
+/home/lifuxian/econa/cns3xxx-sdk/tools/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/bin/../lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.3/include/stdarg.h:
+
+/opt/cnstools/arm-linux-le-uclibc-gcc-4.3.3-2010.05/usr/include/bits/stdio_lim.h:
