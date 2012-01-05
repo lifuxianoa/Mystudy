@@ -3,8 +3,16 @@ module="scull"
 device="scull"
 mode="664"
 
+# Group: since distributions do it differently, look for wheel or use staff
+if grep '^staff:' /etc/group > /dev/null; then
+    group="staff"
+else
+    group="wheel"
+fi
+
 #invoke insmod with all arguments we got and use a pathname, as never modutils
-#don't look in. By default /sbin/insmod ./$module.ko $* || exit 1
+#don't look in. By default 
+/sbin/insmod -f ./$module.ko $* || exit 1
 
 #remove stale nodes
 rm -f /dev/${device}[0-3]
