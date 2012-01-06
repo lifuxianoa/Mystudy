@@ -2,7 +2,7 @@
 #include <linux/init.h>
 #include <linux/kdev_t.h>
 #include <linux/fs.h>
-#include <asm/uaccess.h>
+#include <asm/uaccess.h>        /* copy_*_user */
 
 #include "scull.h"
 
@@ -73,12 +73,18 @@ struct scull_qset * scull_follow(struct scull_dev *dev, int n)
 {
     struct scull_qset *dptr = dev->data;
 
-    if (NULL == dptr)
+    /* Allocate first qset explicitly if need be */
+    if (!dptr)
     {
-        dptr = kmalloc(sizeof(struct scull_qset), GFP_KERNEL);
+        dptr = dev->data = kmalloc(sizeof(struct scull_qset), GFP_KERNEL);
+        if (!dptr)
+        {
+            return NULL;
+        }
         memset(dptr, 0, sizeof(struct scull_qset));
     }
 
+    /* Follow the list */
     while (n--)
     {
         if (!dptr->next)
@@ -101,6 +107,7 @@ ssize_t scull_read(struct file *filp, char __user *buf, size_t count, loff_t *f_
     int item, rest, s_pos, q_pos;
     ssize_t retval = 0;
 
+    //wait_for_completion(&dev->comp);
     if (down_interruptible(&dev->sem))
     {
         return -ERESTARTSYS;
@@ -136,6 +143,7 @@ ssize_t scull_read(struct file *filp, char __user *buf, size_t count, loff_t *f_
         count = quantum - q_pos;
     }
 
+    PDEBUG("s_pos = %d, q_pos = %d, data = %s\n", s_pos, q_pos, (char*)(dptr->data[s_pos] + q_pos));
     if (copy_to_user(buf, dptr->data[s_pos] + q_pos, count))
     {
         retval = -EFAULT;
@@ -166,16 +174,6 @@ ssize_t scull_write(struct file *filp, const char __user *buf, size_t count, lof
     }
 
     PDEBUG("scull_write \n");
-    if (*f_pos >= dev->size)
-    {
-        goto out;
-    }
-
-    if (*f_pos + count > dev->size)
-    {
-        count = dev->size - *f_pos;
-    }
-
     /* find listitem, qset index, and offset in the quantum */
     item = (long) * f_pos / itemsize;
     rest = (long) * f_pos % itemsize;
@@ -184,7 +182,7 @@ ssize_t scull_write(struct file *filp, const char __user *buf, size_t count, lof
 
     /* follow the list up to the right position (defined elsewhere) */
     dptr = scull_follow(dev, item);
-    if (dptr == NULL || !dptr->data || !dptr->data[s_pos])
+    if (dptr == NULL)
     {
         goto out;   /* don't file holes */
     }
@@ -221,6 +219,7 @@ ssize_t scull_write(struct file *filp, const char __user *buf, size_t count, lof
         goto out;
     }
 
+    PDEBUG("s_pos = %d, q_pos = %d, data = %s\n", s_pos, q_pos, (char *)(dptr->data[s_pos] + q_pos));
     *f_pos += count;
     retval = count;
 
@@ -229,6 +228,7 @@ ssize_t scull_write(struct file *filp, const char __user *buf, size_t count, lof
     {
         dev->size = *f_pos;
     }
+    //complete(&dev->comp);
 
 out:
     up(&dev->sem);
@@ -331,6 +331,7 @@ static int scull_init_module(void)
         scull_devices[i].quantum = scull_quantum;
         scull_devices[i].qset = scull_qset;
         init_MUTEX(&scull_devices[i].sem);
+        //init_completion(&scull_devices[i].comp);
         scull_setup_cdev(&scull_devices[i], i);
     }
 

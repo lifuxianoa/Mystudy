@@ -2,6 +2,7 @@
 #define __SCULL_H__
 
 #include <linux/cdev.h>
+#include <linux/completion.h>   /* completion */
 
 #define SCULL_DEBUG
 
@@ -58,6 +59,7 @@ struct scull_dev
     unsigned int access_key;    /* used by sculluid and scullpriv */
     struct semaphore sem;       /* mutual exclusion semaphore */
     struct cdev cdev;           /* Char device structure */
+    //struct completion comp;     /* read write completion */
 };
 
 #endif
