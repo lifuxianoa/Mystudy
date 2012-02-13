@@ -1,5 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/disk1/src/linux-2.6.31.6'
-let g:netrw_dirhist_2='/disk1/broadcom/src/BSEAV/lib/media/build'
-let g:netrw_dirhist_3='/opt/nfs/nfsroot/mnt/nv/bin/ipanel_bin/bin/imlib2'
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/home/ambrosehua/.opera'
+let g:netrw_dirhist_2='/usr/home/ambrosehua/project/bsd/freebsd.new/sys/mips'
+let g:netrw_dirhist_3='/home/hp/proj/Source/boot/obm'
+let g:netrw_dirhist_4='/home/hp/proj/git/ti/linaro/hardware/ti/omap4xxx/hwc'
+let g:netrw_dirhist_5='/home/hp/usr/cns3xxx-sdk/tools'
+let g:netrw_dirhist_6='/home/hp/proj/git/google/external'
+let g:netrw_dirhist_7='/home/hp/proj/svn_checkout2/3rd/src/mldonkey-3.1.0'
+let g:netrw_dirhist_8='/home/hp/proj/svn_checkout2/3rd/src/linux-2.6.35.12/arch/arm/boot'

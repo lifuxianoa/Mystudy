@@ -342,6 +342,10 @@ fail:
     return result;
 }
 
+MODULE_DESCRIPTION("scull test");
+MODULE_AUTHOR("fuxian.li<lifuxian@163.com>");
+MODULE_LICENSE("GPL");
+
 module_init(scull_init_module);
 module_exit(scull_cleanup_module);
 

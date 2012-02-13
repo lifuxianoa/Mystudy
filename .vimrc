@@ -1,989 +1,317 @@
-Ôªø"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"          _
-"      __ | \
-"     /   | /
-"     \__ | \
-" by Amix - http://amix.dk/
-"
-" Maintainer:	Amir Salihefendic <amix3k at gmail.com>
-" Version: 2.7
-" Last Change: 12/10/06 00:09:21
-"
-" Sections:
-" ----------------------
-"   *> General
-"   *> Colors and Fonts
-"   *> Fileformats
-"   *> VIM userinterface
-"   ------ *> Statusline
-"   *> Visual
-"   *> Moving around and tabs
-"   *> General Autocommands
-"   *> Parenthesis/bracket expanding
-"   *> General Abbrevs
-"   *> Editing mappings etc.
-"   *> Command-line config
-"   *> Buffer realted
-"   *> Files and backups
-"   *> Folding
-"   *> Text options
-"   ------ *> Indent
-"   *> Spell checking
-"   *> Plugin configuration
-"   ------ *> Yank ring
-"   ------ *> File explorer
-"   ------ *> Minibuffer
-"   ------ *> Tag list (ctags) - not used
-"   ------ *> LaTeX Suite things
-"   *> Filetype generic
-"   ------ *> Todo
-"   ------ *> VIM
-"   ------ *> HTML related
-"   ------ *> Ruby & PHP section
-"   ------ *> Python section
-"   ------ *> Cheetah section
-"   ------ *> Vim section
-"   ------ *> Java section
-"   ------ *> JavaScript section
-"   ------ *> C mappings
-"   ------ *> SML
-"   ------ *> Scheme bindings
-"   *> Snippets
-"   ------ *> Python
-"   ------ *> javaScript
-"   *> Cope
-"   *> MISC
-"
-"  Tip:
-"   If you find anything that you can't understand than do this:
-"   help keyword OR helpgrep keywords
-"  Example:
-"   Go into command-line mode and type helpgrep nocompatible, ie.
-"   :helpgrep nocompatible
-"   then press <leader>c to see the results, or :botright cw
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Get out of VI's compatible mode..
 set nocompatible
-
-"Sets how many lines of history VIM har to remember
-set history=400
-
-"Enable filetype plugin
-filetype plugin on
-filetype indent on
-
-"Set to auto read when a file is changed from the outside
-set autoread
-
-"Have the mouse enabled all the time:
-set mouse=a
-
-"Set mapleader
-let mapleader = ","
-let g:mapleader = ","
-
-"Fast saving
-"nmap <leader>w :w!<cr>
-"nmap <leader>f :find<cr>
-
-"Fast reloading of the .vimrc
-"map <leader>s :source ~/vim_local/vimrc<cr>
-"Fast editing of .vimrc
-"map <leader>e :e! ~/vim_local/vimrc<cr>
-"When .vimrc is edited, reload it
-"autocmd! bufwritepost vimrc source ~/vim_local/vimrc
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors and Fonts
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Enable syntax hl
-syntax enable
-
-"Set font to Monaco 10pt
-"if MySys() == "mac"
-"  set gfn=Bitstream\ Vera\ Sans\ Mono:h14
-"  set nomacatsui
-"  set termencoding=macroman
-"elseif MySys() == "linux"
-  set gfn=Monospace\ 11
-"endif
-
-if has("gui_running")
-  set guioptions-=T
-  let psc_style='cool'
-  colorscheme ps_color
-else
-  set background=dark
-  colorscheme zellner
-endif
-
-"Some nice mapping to switch syntax (useful if one mixes different languages in one file)
-"map <leader>1 :set syntax=cheetah<cr>
-"map <leader>2 :set syntax=xhtml<cr>
-"map <leader>3 :set syntax=python<cr>
-"map <leader>4 :set ft=javascript<cr>
-"map <leader>$ :syntax sync fromstart<cr>
-
-"autocmd BufEnter * :syntax sync fromstart
-
-"Highlight current
-if has("gui_running")
-  set cursorline
-  hi cursorline guibg=#333333 
-  hi CursorColumn guibg=#333333
-endif
-
-"Omni menu colors
-hi Pmenu guibg=#333333
-hi PmenuSel guibg=#555555 guifg=#ffffff
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Fileformats
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Favorite filetypes
-set ffs=unix,dos,mac
-
-"nmap <leader>fd :se ff=dos<cr>
-"nmap <leader>fu :se ff=unix<cr>
-
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM userinterface
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Set 7 lines to the curors - when moving vertical..
-set so=7
-
-"Turn on WiLd menu
-set wildmenu
-
-"Always show current position
-set ruler
-
-"The commandbar is 2 high
-set cmdheight=2
-
-"Show line number
-set nu
-
-"Do not redraw, when running macros.. lazyredraw
-set lz
-
-"Change buffer - without saving
-set hid
-
-"Set backspace
-set backspace=eol,start,indent
-
-"Bbackspace and cursor keys wrap to
-set whichwrap+=<,>,h,l
-
-"Ignore case when searching
-set ignorecase
-set incsearch
-
-"Set magic on
-set magic
-
-"No sound on errors.
-set noerrorbells
-set novisualbell
-set t_vb=
-
-"show matching bracets
-set showmatch
-
-"How many tenths of a second to blink
-set mat=2
-
-"Highlight search things
-set hlsearch
-
-  """"""""""""""""""""""""""""""
-  " => Statusline
-  """"""""""""""""""""""""""""""
-  "Always hide the statusline
-  set laststatus=2
-
-  function! CurDir()
-     let curdir = substitute(getcwd(), '/Users/amir/', "~/", "g")
-     return curdir
-  endfunction
-
-  "Format the statusline
-  set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c
-
-
-
-""""""""""""""""""""""""""""""
-" => Visual
-""""""""""""""""""""""""""""""
-" From an idea by Michael Naumann
-function! VisualSearch(direction) range
-  let l:saved_reg = @"
-  execute "normal! vgvy"
-  let l:pattern = escape(@", '\\/.*$^~[]')
-  let l:pattern = substitute(l:pattern, "\n$", "", "")
-  if a:direction == 'b'
-    execute "normal ?" . l:pattern . "^M"
-  else
-    execute "normal /" . l:pattern . "^M"
-  endif
-  let @/ = l:pattern
-  let @" = l:saved_reg
-endfunction
-
-"Basically you press * or # to search for the current selection !! Really useful
-vnoremap <silent> * :call VisualSearch('f')<CR>
-vnoremap <silent> # :call VisualSearch('b')<CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around and tabs
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Map space to / and c-space to ?
-"map <space> /
-"map <c-space> ?
-
-"Smart way to move btw. windows
-"map <C-j> <C-W>j
-"map <C-k> <C-W>k
-"map <C-h> <C-W>h
-"map <C-l> <C-W>l
-
-"Actually, the tab does not switch buffers, but my arrows
-"Bclose function ca be found in "Buffer related" section
-"map <leader>bd :Bclose<cr>
-"map <down> <leader>bd
-"Use the arrows to something usefull
-"map <right> :bn<cr>
-"map <left> :bp<cr>
-
-"Tab configuration
-"map <leader>tn :tabnew %<cr>
-"map <leader>te :tabedit 
-"map <leader>tc :tabclose<cr>
-"map <leader>tm :tabmove 
-try
-  set switchbuf=usetab
-  set stal=4
-catch
-endtry
-
-"Moving fast to front, back and 2 sides ;)
-"imap <m-$> <esc>$a
-"imap <m-0> <esc>0i
-"imap <D-$> <esc>$a
-"imap <D-0> <esc>0i
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General Autocommands
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Switch to current dir
-"map <leader>cd :cd %:p:h<cr>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Parenthesis/bracket expanding
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-vnoremap $1 <esc>`>a)<esc>`<i(<esc>
-")
-vnoremap $2 <esc>`>a]<esc>`<i[<esc>
-vnoremap $3 <esc>`>a}<esc>`<i{<esc>
-vnoremap $$ <esc>`>a"<esc>`<i"<esc>
-vnoremap $q <esc>`>a'<esc>`<i'<esc>
-vnoremap $w <esc>`>a"<esc>`<i"<esc>
-
-"Map auto complete of (, ", ', [
-inoremap $1 ()<esc>:let leavechar=")"<cr>i
-inoremap $2 []<esc>:let leavechar="]"<cr>i
-inoremap $4 {<esc>o}<esc>:let leavechar="}"<cr>O
-inoremap $3 {}<esc>:let leavechar="}"<cr>i
-inoremap $q ''<esc>:let leavechar="'"<cr>i
-inoremap $w ""<esc>:let leavechar='"'<cr>i
-au BufNewFile,BufRead *.\(vim\)\@! inoremap " ""<esc>:let leavechar='"'<cr>i
-au BufNewFile,BufRead *.\(txt\)\@! inoremap ' ''<esc>:let leavechar="'"<cr>i
-
-imap <m-l> <esc>:exec "normal f" . leavechar<cr>a
-imap <d-l> <esc>:exec "normal f" . leavechar<cr>a
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General Abbrevs
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"My information
-iab xdate <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
-iab xname Amir Salihefendic
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings etc.
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Remap VIM 0
-map 0 ^
-
-"Move a line of text using control
-nmap <M-j> mz:m+<cr>`z
-nmap <M-k> mz:m-2<cr>`z
-vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
-
-"if MySys() == "mac"
-"  nmap <D-j> <M-j>
-"  nmap <D-k> <M-k>
-"  vmap <D-j> <M-j>
-"  vmap <D-k> <M-k>
-"endif
-
-func! DeleteTrailingWS()
-  exe "normal mz"
-  %s/\s\+$//ge
-  exe "normal `z"
-endfunc
-autocmd BufWrite *.py :call DeleteTrailingWS()
-
-set completeopt=menu
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Command-line config
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-func! Cwd()
-  let cwd = getcwd()
-  return "e " . cwd 
-endfunc
-
-func! DeleteTillSlash()
-  let g:cmd = getcmdline()
-"  if MySys() == "linux" || MySys() == "mac"
-    let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
-"  else
-"    let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
-"  endif
-  if g:cmd == g:cmd_edited
-"    if MySys() == "linux" || MySys() == "mac"
-      let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
-"    else
-"      let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
-    endif
-  endif   
-  return g:cmd_edited
-endfunc
-
-func! CurrentFileDir(cmd)
-  return a:cmd . " " . expand("%:p:h") . "/"
-endfunc
-
-"Smart mappings on the command line
-cno $h e ~/
-cno $d e ~/Desktop/
-cno $j e ./
-
-cno $q <C-\>eDeleteTillSlash()<cr>
-
-cno $c e <C-\>eCurrentFileDir("e")<cr>
-
-cno $tc <C-\>eCurrentFileDir("tabnew")<cr>
-cno $th tabnew ~/
-cno $td tabnew ~/Desktop/
-
-"Bash like
-"cnoremap <C-A>		<Home>
-"cnoremap <C-E>		<End>
-"cnoremap <C-K>		<C-U>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Buffer realted
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Fast open a buffer by search for a name
-map <c-q> :sb 
-
-"Open a dummy buffer for paste
-map <leader>q :e ~/buffer<cr>
-
-"Restore cursor to file position in previous editing session
-set viminfo='10,\"100,:20,%,n~/.viminfo
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
-
-" Buffer - reverse everything ... :)
-map <F9> ggVGg?
-
-" Don't close window, when deleting a buffer
-command! Bclose call <SID>BufcloseCloseIt()
-
-function! <SID>BufcloseCloseIt()
-   let l:currentBufNum = bufnr("%")
-   let l:alternateBufNum = bufnr("#")
-
-   if buflisted(l:alternateBufNum)
-     buffer #
-   else
-     bnext
-   endif
-
-   if bufnr("%") == l:currentBufNum
-     new
-   endif
-
-   if buflisted(l:currentBufNum)
-     execute("bdelete! ".l:currentBufNum)
-   endif
-endfunction
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files and backups
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Turn backup off
+set fileencodings=gb2312,gbk
+set nomodeline
+"set gui font
+set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 11
+"set mouse=a
+"set number
+set helplang=cn
+syntax on
 set nobackup
-set nowb
-set noswapfile
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Folding
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Enable folding, I find it very useful
-set nofen
-set fdl=0
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text options
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"set expandtab
-"set shiftwidth=4
-
-map <leader>t2 :set shiftwidth=2<cr>
-map <leader>t4 :set shiftwidth=4<cr>
-au FileType html,python,vim,javascript setl shiftwidth=4
-au FileType html,python,vim,javascript setl tabstop=4
-au FileType java setl shiftwidth=4
-au FileType java setl tabstop=4
-
-set smarttab
-set lbr
-"set tw=80
-
-   """"""""""""""""""""""""""""""
-   " => Indent
-   """"""""""""""""""""""""""""""
-   "Auto indent
-   set ai
-
-   "Smart indet
-   set si
-
-   "C-style indeting
-   set cindent
-
-   "Wrap lines
-   set wrap
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-   """"""""""""""""""""""""""""""
-   " => Vim Grep
-   """"""""""""""""""""""""""""""
-   let Grep_Skip_Dirs = 'RCS CVS SCCS .svn'
-   let Grep_Cygwin_Find = 1
-
-   """"""""""""""""""""""""""""""
-   " => Yank Ring
-   """"""""""""""""""""""""""""""
-   map <leader>y :YRShow<cr>
-
-   """"""""""""""""""""""""""""""
-   " => File explorer
-   """"""""""""""""""""""""""""""
-   "Split vertically
-   let g:explVertical=1
-
-   "Window size
-   let g:explWinSize=35
-
-   let g:explSplitLeft=1
-   let g:explSplitBelow=1
-
-   "Hide some files
-   let g:explHideFiles='^\.,.*\.class$,.*\.swp$,.*\.pyc$,.*\.swo$,\.DS_Store$'
-
-   "Hide the help thing..
-   let g:explDetailedHelp=0
-
-
-   """"""""""""""""""""""""""""""
-   " => Minibuffer
-   """"""""""""""""""""""""""""""
-   let g:miniBufExplModSelTarget = 1
-   let g:miniBufExplorerMoreThanOne = 2
-   let g:miniBufExplModSelTarget = 0
-   let g:miniBufExplUseSingleClick = 1
-   let g:miniBufExplMapWindowNavVim = 1
-   let g:miniBufExplVSplit = 25
-   let g:miniBufExplSplitBelow=1
-
-   let g:bufExplorerSortBy = "name"
-
-   autocmd BufRead,BufNew :call UMiniBufExplorer
-
-
-   """"""""""""""""""""""""""""""
-   " => Tag list (ctags) - not used
-   """"""""""""""""""""""""""""""
-   "let Tlist_Ctags_Cmd = "/sw/bin/ctags-exuberant"
-   "let Tlist_Sort_Type = "name"
-   "let Tlist_Show_Menu = 1
-   "map <leader>t :Tlist<cr>
-
-
-   """"""""""""""""""""""""""""""
-   " => LaTeX Suite things
-   """"""""""""""""""""""""""""""
-   set grepprg=grep\ -nH\ $*
-   let g:Tex_DefaultTargetFormat="pdf"
-   let g:Tex_ViewRule_pdf='xpdf'
-
-   "Bindings
-   autocmd FileType tex map <silent><leader><space> :w!<cr> :silent! call Tex_RunLaTeX()<cr>
-
-   "Auto complete some things ;)
-   autocmd FileType tex inoremap $i \indent 
-   autocmd FileType tex inoremap $* \cdot 
-   autocmd FileType tex inoremap $i \item 
-   autocmd FileType tex inoremap $m \[<cr>\]<esc>O
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Filetype generic
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-   " => Todo
-   """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-   au BufNewFile,BufRead *.todo so ~/vim_local/syntax/amido.vim
-
-   """"""""""""""""""""""""""""""
-   " => VIM
-   """"""""""""""""""""""""""""""
-   autocmd FileType vim map <buffer> <leader><space> :w!<cr>:source %<cr>
-   
-
-   """"""""""""""""""""""""""""""
-   " => HTML related
-   """"""""""""""""""""""""""""""
-   " HTML entities - used by xml edit plugin
-   let xml_use_xhtml = 1
-   "let xml_no_auto_nesting = 1
-
-   "To HTML
-   let html_use_css = 1
-   let html_number_lines = 0
-   let use_xhtml = 1
-
-
-   """"""""""""""""""""""""""""""
-   " => Ruby & PHP section
-   """"""""""""""""""""""""""""""
-   autocmd FileType ruby map <buffer> <leader><space> :w!<cr>:!ruby %<cr>
-   autocmd FileType php compiler php
-   autocmd FileType php map <buffer> <leader><space> <leader>cd:w<cr>:make %<cr>
-
-
-   """"""""""""""""""""""""""""""
-   " => Python section
-   """"""""""""""""""""""""""""""
-   "Run the current buffer in python - ie. on leader+space
-   au FileType python so ~/vim_local/syntax/python.vim
-   autocmd FileType python map <buffer> <leader><space> :w!<cr>:!python %<cr>
-   autocmd FileType python so ~/vim_local/plugin/python_fold.vim
-
-   "Set some bindings up for 'compile' of python
-   autocmd FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-   autocmd FileType python set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-
-   "Python iMaps
-   au FileType python set cindent
-   au FileType python inoremap <buffer> $r return 
-   au FileType python inoremap <buffer> $s self 
-   au FileType python inoremap <buffer> $c ##<cr>#<space><cr>#<esc>kla
-   au FileType python inoremap <buffer> $i import 
-   au FileType python inoremap <buffer> $p print 
-   au FileType python inoremap <buffer> $d """<cr>"""<esc>O
-
-   "Run in the Python interpreter
-   function! Python_Eval_VSplit() range
-     let src = tempname()
-     let dst = tempname()
-     execute ": " . a:firstline . "," . a:lastline . "w " . src
-     execute ":!python " . src . " > " . dst
-     execute ":pedit! " . dst
-   endfunction
-   au FileType python vmap <F7> :call Python_Eval_VSplit()<cr> 
-
-   """"""""""""""""""""""""""""""
-   " => Cheetah section
-   """""""""""""""""""""""""""""""
-   autocmd FileType cheetah set ft=xml
-   autocmd FileType cheetah set syntax=cheetah
-
-   """""""""""""""""""""""""""""""
-   " => Vim section
-   """""""""""""""""""""""""""""""
-   autocmd FileType vim set nofen
-
-   """""""""""""""""""""""""""""""
-   " => Java section
-   """""""""""""""""""""""""""""""
-   au FileType java inoremap <buffer> <C-t> System.out.println();<esc>hi
-
-   "Java comments
-   autocmd FileType java source ~/vim_local/macros/jcommenter.vim
-   autocmd FileType java let b:jcommenter_class_author='Amir Salihefendic (amix@amix.dk)'
-   autocmd FileType java let b:jcommenter_file_author='Amir Salihefendic (amix@amix.dk)'
-   autocmd FileType java map <buffer> <F2> :call JCommentWriter()<cr>
-
-   "Abbr'z
-   autocmd FileType java inoremap <buffer> $pr private 
-   autocmd FileType java inoremap <buffer> $r return 
-   autocmd FileType java inoremap <buffer> $pu public 
-   autocmd FileType java inoremap <buffer> $i import 
-   autocmd FileType java inoremap <buffer> $b boolean 
-   autocmd FileType java inoremap <buffer> $v void 
-   autocmd FileType java inoremap <buffer> $s String 
-
-   "Folding
-   function! JavaFold() 
-     setl foldmethod=syntax
-     setl foldlevelstart=1
-     syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-     syn match foldImports /\(\n\?import.\+;\n\)\+/ transparent fold
-
-     function! FoldText()
-       return substitute(getline(v:foldstart), '{.*', '{...}', '')
-     endfunction
-     setl foldtext=FoldText()
-   endfunction
-   au FileType java call JavaFold()
-   au FileType java setl fen
-
-   au BufEnter *.sablecc,*.scc set ft=sablecc
-
-   """"""""""""""""""""""""""""""
-   " => JavaScript section
-   """""""""""""""""""""""""""""""
-   "au FileType javascript so ~/vim_local/syntax/javascript.vim
-   "function! JavaScriptFold() 
-   "  setl foldmethod=syntax
-   "  setl foldlevelstart=1
-   "  syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-
-     "function! FoldText()
-      " return substitute(getline(v:foldstart), '{.*', '{...}', '')
-     "endfunction
-    " setl foldtext=FoldText()
-   "endfunction
-   "au FileType javascript call JavaScriptFold()
-   "au FileType javascript setl fen
-
-   "au FileType javascript imap <c-t> console.log();<esc>hi
-   "au FileType javascript imap <c-a> alert();<esc>hi
-   "au FileType javascript setl nocindent
-   "au FileType javascript inoremap <buffer> $r return 
-
-   "au FileType javascript inoremap <buffer> $d //<cr>//<cr>//<esc>ka<space> 
-   "au FileType javascript inoremap <buffer> $c /**<cr><space><cr>**/<esc>ka
-
-
-   """"""""""""""""""""""""""""""
-   " => HTML
-   """""""""""""""""""""""""""""""
-   au FileType html,cheetah set ft=xml
-   au FileType html,cheetah set syntax=html
-
-
-   """"""""""""""""""""""""""""""
-   " => C mappings
-   """""""""""""""""""""""""""""""
-   autocmd FileType c map <buffer> <leader><space> :w<cr>:!gcc %<cr>
-
-
-   """""""""""""""""""""""""""""""
-   " => SML
-   """""""""""""""""""""""""""""""
-   autocmd FileType sml map <silent> <buffer> <leader><space> <leader>cd:w<cr>:!sml %<cr>
-
-
-   """"""""""""""""""""""""""""""
-   " => Scheme bidings
-   """"""""""""""""""""""""""""""
-   autocmd BufNewFile,BufRead *.scm map <buffer> <leader><space> <leader>cd:w<cr>:!petite %<cr>
-   autocmd BufNewFile,BufRead *.scm inoremap <buffer> <C-t> (pretty-print )<esc>i
-   autocmd BufNewFile,BufRead *.scm vnoremap <C-t> <esc>`>a)<esc>`<i(pretty-print <esc>
-
-
-   """"""""""""""""""""""""""""""
-   " => SVN section
-   """""""""""""""""""""""""""""""
-   map <F8> :new<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
-
+set ignorecase
+set ttymouse=xterm2
+set ruler
+set wrap
+set incsearch
+set showcmd
+set showmode
+set cindent
+set autoindent
+set showmatch
+set smartindent
+set writebackup
+
+
+filetype plugin indent on
+
+colorscheme delek
+
+set backspace=indent,eol,start
+set hlsearch
+"set tab quick access
+nmap <F11> :cope<CR>
+nmap <C-F11> :cclo<CR>
+nmap <F7>  :cn<CR>
+nmap <F6> :cp<CR>
+
+
+map <F12> :!exctags  --extra=+q  --fields=+iaS --c++-kinds=+px -L cscope.files <CR>
+"set taglist
+"let Tlist_Auto_Open=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Show_One_File=1
+let Tlist_Ctags_Cmd="ctags"
+
+"set cscope
+if has("cscope")
+
+    """"""""""""" Standard cscope/vim boilerplate
+
+    " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
+    set cscopetag
+
+    " check cscope for definition of a symbol before checking ctags: set to 1
+    " if you want the reverse search order.
+    set csto=0
+
+    " add any cscope database in current directory
+    if filereadable("cscope.out")
+        cs add cscope.out  
+    " else add the database pointed to by environment variable 
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+
+    " show msg when any other cscope db added
+    set cscopeverbose  
+    set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+
+    """"""""""""" My cscope/vim key mappings
+    "
+    " The following maps all invoke one of the following cscope search types:
+    "
+    "   's'   symbol: find all references to the token under cursor
+    "   'g'   global: find global definition(s) of the token under cursor
+    "   'c'   calls:  find all calls to the function name under cursor
+    "   't'   text:   find all instances of the text under cursor
+    "   'e'   egrep:  egrep search for the word under cursor
+    "   'f'   file:   open the filename under cursor
+    "   'i'   includes: find files that include the filename under cursor
+    "   'd'   called: find functions that function under cursor calls
+    "
+    " Below are three sets of the maps: one set that just jumps to your
+    " search result, one that splits the existing vim window horizontally and
+    " diplays your search result in the new window, and one that does the same
+    " thing, but does a vertical split instead (vim 6 only).
+    "
+    " I've used CTRL-\ and CTRL-@ as the starting keys for these maps, as it's
+    " unlikely that you need their default mappings (CTRL-\'s default use is
+    " as part of CTRL-\ CTRL-N typemap, which basically just does the same
+    " thing as hitting 'escape': CTRL-@ doesn't seem to have any default use).
+    " If you don't like using 'CTRL-@' or CTRL-\, , you can change some or all
+    " of these maps to use other keys.  One likely candidate is 'CTRL-_'
+    " (which also maps to CTRL-/, which is easier to type).  By default it is
+    " used to switch between Hebrew and English keyboard mode.
+    "
+    " All of the maps involving the <cfile> macro use '^<cfile>$': this is so
+    " that searches over '#include <time.h>" return only references to
+    " 'time.h', and not 'sys/time.h', etc. (by default cscope will return all
+    " files that contain 'time.h' as part of their name).
+
+
+    " To do the first type of search, hit 'CTRL-\', followed by one of the
+    " cscope search types above (s,g,c,t,e,f,i,d).  The result of your cscope
+    " search will be displayed in the current window.  You can use CTRL-T to
+    " go back to where you were before the search.  
+    "
+
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>	
+    nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>	
+
+
+    " Using 'CTRL-spacebar' (intepreted as CTRL-@ by vim) then a search type
+    " makes the vim window split horizontally, with search result displayed in
+    " the new window.
+    "
+    " (Note: earlier versions of vim may not have the :scs command, but it
+    " can be simulated roughly via:
+    "    nmap <C-/>s <C-W><C-S> :cs find s <C-R>=expand("<cword>")<CR><CR>	
+
+    nmap <C-/>s :scs find s <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-/>g :scs find g <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-/>c :scs find c <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-/>t :scs find t <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-/>e :scs find e <C-R>=expand("<cword>")<CR><CR>	
+    nmap <C-/>f :scs find f <C-R>=expand("<cfile>")<CR><CR>	
+    nmap <C-/>i :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>	
+    nmap <C-/>d :scs find d <C-R>=expand("<cword>")<CR><CR>	
+
+
+    " Hitting CTRL-space *twice* before the search type does a vertical 
+    " split instead of a horizontal one (vim 6 and up only)
+    "
+    " (Note: you may wish to put a 'set splitright' in your .vimrc
+    " if you prefer the new window on the right instead of the left
+
+    nmap <C-/><C-/>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-/><C-/>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-/><C-/>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-/><C-/>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-/><C-/>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-/><C-/>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>	
+    nmap <C-/><C-/>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>	
+    nmap <C-/><C-/>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
+
+
+    """"""""""""" key map timeouts
+    "
+    " By default Vim will only wait 1 second for each keystroke in a mapping.
+    " You may find that too short with the above typemaps.  If so, you should
+    " either turn off mapping timeouts via 'notimeout'.
+    "
+    "set notimeout 
+    "
+    " Or, you can keep timeouts, by uncommenting the timeoutlen line below,
+    " with your own personal favorite value (in milliseconds):
+    "
+    "set timeoutlen=4000
+    "
+    " Either way, since mapping timeout settings by default also set the
+    " timeouts for multicharacter 'keys codes' (like <F1>), you should also
+    " set ttimeout and ttimeoutlen: otherwise, you will experience strange
+    " delays as vim waits for a keystroke after you hit ESC (it will be
+    " waiting to see if the ESC is actually part of a key code like <F1>).
+    "
+    "set ttimeout 
+    "
+    " personally, I find a tenth of a second to work well for key code
+    " timeouts. If you experience problems and have a slow terminal or network
+    " connection, set it higher.  If you don't set ttimeoutlen, the value for
+    " timeoutlent (default: 1000 = 1 second, which is sluggish) is used.
+    "
+    "set ttimeoutlen=100
+
+endif
+
+"set folding
+"set foldmethod=syntax
+
+"set tabwidth
+set sw=4
+set ts=4
+"set smarttab
+set softtabstop=4
+set noet
+
+"set winmanager
+let g:winManagerWindowLayout = "FileExplorer|TagList"
+let g:winManagerWidth = 30
+let g:defaultExplorer = 0
+
+nmap <C-W><C-F> :FirstExplorerWindow<cr>
+nmap <C-W><C-B> :BottomExplorerWindow<cr>
+nmap <C-W><C-T> :WMToggle<cr>
+nmap <F8> :WMToggle<cr>
 
 """"""""""""""""""""""""""""""
-" => Snippets
-"""""""""""""""""""""""""""""""
-   "You can use <c-j> to goto the next <++> - it is pretty smart ;)
+" lookupfile setting
+""""""""""""""""""""""""""""""
+let g:LookupFile_MinPatLength = 3               "◊Ó…Ÿ ‰»Î2∏ˆ◊÷∑˚≤≈ø™ º≤È’“
+let g:LookupFile_PreserveLastPattern = 0        "≤ª±£¥Ê…œ¥Œ≤È’“µƒ◊÷∑˚¥Æ
+let g:LookupFile_PreservePatternHistory = 1     "±£¥Ê≤È’“¿˙ ∑
+let g:LookupFile_AlwaysAcceptFirst = 1          "ªÿ≥µ¥Úø™µ⁄“ª∏ˆ∆•≈‰œÓƒø
+let g:LookupFile_AllowNewFiles = 0              "≤ª‘ –Ì¥¥Ω®≤ª¥Ê‘⁄µƒŒƒº˛
+if filereadable("./filenametags")                "…Ë÷√tagŒƒº˛µƒ√˚◊÷
+    let g:LookupFile_TagExpr = '"./filenametags"'
+endif             "
+"""""""""""""""""""""""""""""""""""
+" OmniCpp
+"""""""""""""""""""""""""""""""""""
 
-   """""""""""""""""""""""""""""""
-   " => Python
-   """""""""""""""""""""""""""""""
-   autocmd FileType python inorea <buffer> cfun <c-r>=IMAP_PutTextWithMovement("def <++>(<++>):\n<++>\nreturn <++>")<cr>
-   autocmd FileType python inorea <buffer> cclass <c-r>=IMAP_PutTextWithMovement("class <++>:\n<++>")<cr>
-   autocmd FileType python inorea <buffer> cfor <c-r>=IMAP_PutTextWithMovement("for <++> in <++>:\n<++>")<cr>
-   autocmd FileType python inorea <buffer> cif <c-r>=IMAP_PutTextWithMovement("if <++>:\n<++>")<cr>
-   autocmd FileType python inorea <buffer> cifelse <c-r>=IMAP_PutTextWithMovement("if <++>:\n<++>\nelse:\n<++>")<cr>
-
-
-   """""""""""""""""""""""""""""""
-   " => JavaScript
-   """""""""""""""""""""""""""""""
-   autocmd FileType cheetah,html,javascript inorea <buffer> cfun <c-r>=IMAP_PutTextWithMovement("function <++>(<++>) {\n<++>;\nreturn <++>;\n}")<cr>
-   autocmd filetype cheetah,html,javascript inorea <buffer> cfor <c-r>=IMAP_PutTextWithMovement("for(<++>; <++>; <++>) {\n<++>;\n}")<cr>
-   autocmd FileType cheetah,html,javascript inorea <buffer> cif <c-r>=IMAP_PutTextWithMovement("if(<++>) {\n<++>;\n}")<cr>
-   autocmd FileType cheetah,html,javascript inorea <buffer> cifelse <c-r>=IMAP_PutTextWithMovement("if(<++>) {\n<++>;\n}\nelse {\n<++>;\n}")<cr>
-
-
-   """""""""""""""""""""""""""""""
-   " => HTML
-   """""""""""""""""""""""""""""""
-   autocmd FileType cheetah,html inorea <buffer> cahref <c-r>=IMAP_PutTextWithMovement('<a href="<++>"><++></a>')<cr>
-   autocmd FileType cheetah,html inorea <buffer> cbold <c-r>=IMAP_PutTextWithMovement('<b><++></b>')<cr>
-   autocmd FileType cheetah,html inorea <buffer> cimg <c-r>=IMAP_PutTextWithMovement('<img src="<++>" alt="<++>" />')<cr>
-   autocmd FileType cheetah,html inorea <buffer> cpara <c-r>=IMAP_PutTextWithMovement('<p><++></p>')<cr>
-   autocmd FileType cheetah,html inorea <buffer> ctag <c-r>=IMAP_PutTextWithMovement('<<++>><++></<++>>')<cr>
-   autocmd FileType cheetah,html inorea <buffer> ctag1 <c-r>=IMAP_PutTextWithMovement("<<++>><cr><++><cr></<++>>")<cr>
-
-
-   """""""""""""""""""""""""""""""
-   " => Java
-   """""""""""""""""""""""""""""""
-   autocmd FileType java inorea <buffer> cfun <c-r>=IMAP_PutTextWithMovement("public<++> <++>(<++>) {\n<++>;\nreturn <++>;\n}")<cr> 
-   autocmd FileType java inorea <buffer> cfunpr <c-r>=IMAP_PutTextWithMovement("private<++> <++>(<++>) {\n<++>;\nreturn <++>;\n}")<cr> 
-   autocmd FileType java inorea <buffer> cfor <c-r>=IMAP_PutTextWithMovement("for(<++>; <++>; <++>) {\n<++>;\n}")<cr> 
-   autocmd FileType java inorea <buffer> cif <c-r>=IMAP_PutTextWithMovement("if(<++>) {\n<++>;\n}")<cr> 
-   autocmd FileType java inorea <buffer> cifelse <c-r>=IMAP_PutTextWithMovement("if(<++>) {\n<++>;\n}\nelse {\n<++>;\n}")<cr>
-   autocmd FileType java inorea <buffer> cclass <c-r>=IMAP_PutTextWithMovement("class <++> <++> {\n<++>\n}")<cr>
-   autocmd FileType java inorea <buffer> cmain <c-r>=IMAP_PutTextWithMovement("public static void main(String[] argv) {\n<++>\n}")<cr>
-   
-
-   "Presse c-q insted of space (or other key) to complete the snippet
-   imap <C-q> <C-]>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Cope
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"For Cope
-map <silent> <leader><cr> :noh<cr>
-
-"Orginal for all
-map <leader>n :cn<cr>
-map <leader>p :cp<cr>
-map <leader>c :botright cw 10<cr>
-map <c-u> <c-l><c-j>:q<cr>:botright cw 10<cr>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => MISC
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Remove the Windows ^M
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
-"Paste toggle - when pasting something in, don't indent.
-set pastetoggle=<F3>
-
-"Remove indenting on empty lines
-map <F2> :%s/\s*$//g<cr>:noh<cr>''
-
-"Super paste
-inoremap <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
-
-"A function that inserts links & anchors on a TOhtml export.
-" Notice:
-" Syntax used is:
-"   *> Link
-"   => Anchor
-function! SmartTOHtml()
-   TOhtml
-   try
-    %s/&quot;\s\+\*&gt; \(.\+\)</" <a href="#\1" style="color: cyan">\1<\/a></g
-    %s/&quot;\(-\|\s\)\+\*&gt; \(.\+\)</" \&nbsp;\&nbsp; <a href="#\2" style="color: cyan;">\2<\/a></g
-    %s/&quot;\s\+=&gt; \(.\+\)</" <a name="\1" style="color: #fff">\1<\/a></g
-   catch
-   endtry
-   exe ":write!"
-   exe ":bd"
-endfunction
-
-set nocp
-"set textwidth=80
-set hlsearch
-set cursorline
-set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936
-
-noremap <leader>m :%s/"r//g<cr>
-let Tlist_Use_Right_Window=0
-let Tlist_File_Fold_Auto_Close=1
-
-"Â§á‰ªΩÁõ∏ÂÖ≥ÈÖçÁΩÆ
-set nobackup             
-set backupext=.bak       
-set writebackup          "ÂÜôÂ§á‰ªΩ‰ΩÜÂÖ≥Èó≠vimÂêéËá™Âä®Âà†Èô§
-"set backupdir=path      "ËÆæÁΩÆÂ§á‰ªΩË∑ØÂæÑ
-
-"Omnicppcomplete Configuration
-"‰∏ãÈù¢‰∏§Ë°åÂºÄÂêØ‰∫Üvim‰∏âÁßçÊô∫ËÉΩ
-"1.Ëá™Âä®ËØÜÂà´fileÁ±ªÂûã
-"2.Áî®file type pluginËÑöÊú¨
-"3.‰ΩøÁî®Áº©ËøõÂÆö‰πâÊñá‰ª∂
-set nocompatible
-filetype plugin on
-filetype indent on
-let OmniCpp_DefaultNamespaces=["std"]
+let OmniCpp_DefaultNampspaces=["std"]
 let OmniCpp_MayCompleteScope=1
-set completeopt=longest,menu          "ÂÖ≥ÊéâÊô∫ËÉΩË°•ÂÖ®Êó∂ÁöÑÈ¢ÑËßàÁ™óÂè£
-map <silent> <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-set tags+=/usr/include/c++/4.2.4/tags
+set completeopt=longest,menu
 
-"Tlist Configuration  taglist.vim
-let Tlist_Process_File_Always=1     "Always Process File
-let Tlist_Auto_Open=0              "Open Tlist when vim start
-let Tlist_Enable_Fold_Column=1        
-let Tlist_Exit_OnlyWindow=1         "If only Tlist window works, vim exit.
-let Tlist_Sort_Type="name"          "sort by name
-let Tlist_Show_One_File=1
+set nomodeline
 
-"echofunc Configuration
-let g:EchoFuncKeyPrev='<C-b>'
-let g:EchoFuncKeyNext='<C-n>'
+"let g:EchoFuncKeyPrev='<C-b>'
+"let g:EchoFuncKeyNext='<C-n>'
 
-"trinity.vim: Build the trinity of srcexpl,taglist,
-"NERD_tree to be a good IDE
-nmap <F8> :TrinityToggleAll<CR>
-nmap <F9> :TrinityToggleSourceExplorer<CR>
-nmap <F10> :TrinityToggleTagList<CR>
-nmap <F11> :TrinityToggleNERDTree<CR>
-
-set whichwrap+=h,l
-set autoindent
-set smartindent
-set cindent
-set shiftwidth=4
-set tabstop=4
-set vb t_vb=
-set fileencodings=utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latinl,cp936
-"set termencoding=utf-8
-"set fileformats=unix
-
-"Ë°åÂè∑
+"––∫≈
 set nu
 
-"ÂÖâÊ†áÁ∫ø
+"π‚±Íœﬂ
 set cursorline
 
-"Â∑•‰ΩúÂú®‰∏çÂÖºÂÆπÊ®°Âºè‰∏ã
+"π§◊˜‘⁄≤ªºÊ»›ƒ£ Ωœ¬
 set nocp
 
-"ÊâìÂºÄVIMÁä∂ÊÄÅÊ†èÊ†áÂ∞∫
+"¥Úø™VIM◊¥Ã¨¿∏±Í≥ﬂ
 set ru
 
-"ÊêúÁ¥¢Êó∂È´ò‰∫ÆÊòæÁ§∫Ë¢´ÊâæÂà∞ÁöÑÊñáÊú¨
+"À—À˜ ±∏ﬂ¡¡œ‘ æ±ª’“µΩµƒŒƒ±æ
 set hls
 
-"ÊêúÁ¥¢Êó∂Âú®Êú™ÂÆåÂÖ®ËæìÂÖ•ÂÆåÊØïË¶ÅÊ£ÄÁ¥¢ÁöÑÊñáÊú¨Êó∂Â∞±ÂºÄÂßãÊ£ÄÁ¥¢
+"À—À˜ ±‘⁄Œ¥ÕÍ»´ ‰»ÎÕÍ±œ“™ºÏÀ˜µƒŒƒ±æ ±æÕø™ ººÏÀ˜
 set is
 
-"ÊâìÂºÄÂÖ≥ÈîÆÂ≠óÈ´ò‰∫Æ
+"¥Úø™πÿº¸◊÷∏ﬂ¡¡
 syntax on
 
-"BackspaceÂà†Èô§
+"Backspace…æ≥˝
 set backspace=indent,eol,start
 "set backspace=2
 
-"Â∑¶Âè≥Âà∞Â§¥Êó∂Ëá™Âä®ÂàáÊç¢Âà∞‰∏ä‰∏ãË°å
+"◊Û”“µΩÕ∑ ±◊‘∂Ø«–ªªµΩ…œœ¬––
 set whichwrap=b,s,<,>,[,] 
 
-"ÂÜÖÁ†Å‰ΩøÁî®utf8Ôºå‰ºòÂÖà‰ª•utf8Â∞ùËØïËß£Á†Å
+"ƒ⁄¬Î π”√utf8£¨”≈œ»“‘utf8≥¢ ‘Ω‚¬Î
 set encoding=utf8
 set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 
-"Ëá™Âä®Áº©Ëøõ4‰∏™Á©∫Ê†º
+"◊‘∂ØÀıΩ¯4∏ˆø’∏Ò
 set sw=4
 
-"TabÂÆΩÂ∫¶4‰∏™Â≠óÁ¨¶
+"TabøÌ∂»4∏ˆ◊÷∑˚
 set ts=4
 
-"‰∏çÂú®ÂçïËØç‰∏≠Èó¥Êñ≠Ë°å
+"≤ª‘⁄µ•¥ ÷–º‰∂œ––
 set lbr
 
-"ÊâìÂºÄÊñ≠Ë°åÊ®°ÂºèÂØπ‰∫öÊ¥≤ËØ≠Ë®ÄÊîØÊåÅ
+"¥Úø™∂œ––ƒ£ Ω∂‘—«÷ﬁ”Ô—‘÷ß≥÷
 set fo+=mB 
 
-"ÊòæÁ§∫Êã¨Âè∑ÈÖçÂØπÊÉÖÂÜµ
+"œ‘ æ¿®∫≈≈‰∂‘«Èøˆ
 set sm
 
-"ÊâìÂºÄC/C++È£éÊ†ºÁöÑËá™Âä®Áº©Ëøõ
+"¥Úø™C/C++∑Á∏Òµƒ◊‘∂ØÀıΩ¯
 set cin
 
-"ÊòØÂê¶Âú®Áº©ËøõÂíåÈÅáÂà∞ Tab ÈîÆÊó∂‰ΩøÁî®Á©∫Ê†ºÊõø‰ª£Ôºõ‰ΩøÁî® noexpandtab ÂèñÊ∂àËÆæÁΩÆ
+" «∑Ò‘⁄ÀıΩ¯∫Õ”ˆµΩ Tab º¸ ± π”√ø’∏ÒÃÊ¥˙£ª π”√ noexpandtab »°œ˚…Ë÷√
 set expandtab
 
-"Ëá™Âä®Áº©ËøõÔºåÂç≥ÊØèË°åÁöÑÁº©ËøõÂÄº‰∏é‰∏ä‰∏ÄË°åÁõ∏Á≠âÔºõ‰ΩøÁî® noautoindent ÂèñÊ∂àËÆæÁΩÆ
+"◊‘∂ØÀıΩ¯£¨º¥√ø––µƒÀıΩ¯÷µ”Î…œ“ª––œ‡µ»£ª π”√ noautoindent »°œ˚…Ë÷√
 set autoindent
 
-"ÊåâBackSpaceÁöÑÊó∂ÂÄôÂèØ‰ª•‰∏ÄÊ¨°Âà†Èô§4‰∏™Á©∫Ê†º
+"∞¥BackSpaceµƒ ±∫Úø…“‘“ª¥Œ…æ≥˝4∏ˆø’∏Ò
 set softtabstop=4
 
-"Ê£ÄÊµãÊñá‰ª∂Á±ªÂûã
+"ºÏ≤‚Œƒº˛¿‡–Õ
 "filetype on
 
-"Ê£ÄÊµãÊñá‰ª∂Á±ªÂûãÊèí‰ª∂
+"ºÏ≤‚Œƒº˛¿‡–Õ≤Âº˛
 "filetype plugin on
 
-"‰∏ä‰∏ãÂèØËßÜË°åÊï∞
+"…œœ¬ø… ”–– ˝
 set scrolloff=6
 
-"Âú®Ë°åÂíåÊÆµÂºÄÂßãÂ§Ñ‰ΩøÁî®Âà∂Ë°®Á¨¶
+"‘⁄––∫Õ∂Œø™ º¥¶ π”√÷∆±Ì∑˚
 set smarttab
 
-"Â¢ûÂº∫Ê®°Âºè‰∏≠ÁöÑÂëΩ‰ª§Ë°åËá™Âä®ÂÆåÊàêÊìç‰Ωú
+"‘ˆ«øƒ£ Ω÷–µƒ√¸¡Ó––◊‘∂ØÕÍ≥…≤Ÿ◊˜
 set wildmenu
 
-"ÊâìÂºÄËá™Âä®ÊäòÂè†
+"¥Úø™◊‘∂Ø’€µ˛
 "set foldenable
 "set foldmethod=indent
 
-"ÊØè‰∏ÄË°åÂàóÊï∞ÔºåÁî®‰∫éËá™Âä®Êç¢Ë°å
-set textwidth=78
+"√ø“ª––¡– ˝£¨”√”⁄◊‘∂Øªª––
+"set textwidth=78
 
-set columns=85
+"set columns=85
 
-"Ë°åÂè∑ÂÆΩÂ∫¶
+"––∫≈øÌ∂»
 set numberwidth=5
 
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+let mapleader=","
