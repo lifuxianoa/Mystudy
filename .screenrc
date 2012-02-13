@@ -1,0 +1,35 @@
+defutf8 on
+
+vbell off
+autodetach on
+startup_message off
+bind k
+bind ^k
+bind .
+bind ^\
+bind \\
+bind ^h
+bind h
+
+hardstatus string "[screen %n%?: %t%?] %h"
+shelltitle "Bash"
+caption always "%{= dd}%-w%{+bu}%n %t%{-}%+w  %=%D-%m/%d %c:%s"
+#caption always "%{= dd}%-w%{+bu}%n %t%{-}%+w %=%c"
+
+#caption always "%{= dd}%-w%{+bu}%n %t%{-}%+w "
+
+bind ^l "windowlist"
+maptimeout 200
+#bindkey -d "ainfo" screen -t info  info
+#bindkey -d "avi" screen -t vi  vi
+#Raphael ?:
+#bindkey -d "apy" screen -t python  python
+bindkey -d "aa"  other
+#bindkey -d "al"  windowlist
+#bindkey -d "ac"  screen
+#escape \033\033
+escape ``
+vbell on           # default: off
+vbell_msg "   !!! Ring, Ring!! --   "   # default: "Wuff,Wuff!!"
+bell_msg " bell from windows [%n %t] "  # default: "Wuff,Wuff!!"
+altscreen on
