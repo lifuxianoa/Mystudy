@@ -477,3 +477,6 @@ set foldmethod=indent
 set foldlevel=1000
 highlight Pmenu ctermbg=darkred
 highlight PmenuSel ctermbg=red ctermfg=yellow
+"au BufRead,BufNewFile *.c,*.cpp,*.py match Error /\%80v.\%81v./
+au BufRead,BufNewFile *.c,*.cpp,*.py 2match Underlined /.\%81v/
+"set colorcolumn=81
