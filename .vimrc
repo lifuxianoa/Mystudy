@@ -474,4 +474,6 @@ let g:load_doxygen_syntax=1
 
 " Fold
 set foldmethod=indent
-set foldlevel=10
+set foldlevel=1000
+highlight Pmenu ctermbg=darkred
+highlight PmenuSel ctermbg=red ctermfg=yellow
