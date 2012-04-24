@@ -52,7 +52,7 @@ static ssize_t globalmem_read(struct file *filp, char __user *buf,
         return count ? -ENXIO : 0;
     }
 
-    if (count > GLOBALMEM_SIZE - p) /* 要读的直接数太大 */
+    if (count > GLOBALMEM_SIZE - p) /* 要读的字节数太大 */
     {
         count = GLOBALMEM_SIZE - p;
     }
@@ -68,6 +68,39 @@ static ssize_t globalmem_read(struct file *filp, char __user *buf,
         ret = count;
 
         printk(KERN_INFO "read %d bytes from %d\n", count, p);
+    }
+
+    return ret;
+}
+
+static ssize_t globalmem_write(struct file *filp, const char __user *buf,
+        ssize_t count, loff_t *ppos)
+{
+    unsigned long p = *ppos;
+    int ret = 0;
+
+    /* 分析和获取有效的写长度 */
+    if (p > GLOBALMEM_SIZE) /* 要写的偏移位置越界 */
+    {
+        return count ? - ENXIO : 0;
+    }
+
+    if (p + count > GLOBALMEM_SIZE) /* 要写的字节数太多 */
+    {
+        count = GLOBALMEM_SIZE - p;
+    }
+
+    /* 用户空间->内核空间 */
+    if (copy_from_user((void *)(dev.mem + p), buf, count))
+    {
+        ret = - EFAULT;
+    }
+    else
+    {
+        *ppos + count;
+        ret = count;
+
+        printk(KERN_INFO "written %d bytes from %d\n", count, p);
     }
 
     return ret;
