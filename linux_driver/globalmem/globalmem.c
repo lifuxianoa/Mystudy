@@ -1,5 +1,5 @@
 /*
- * ============================================================================
+ * =============================================================================
  *
  *       Filename:  globalmem.c
  *
@@ -13,11 +13,11 @@
  *         Author:  lifuxian (Li Fuxian), lifuxianoa@163.com
  *        Company:  Feixun Corp.
  *
- * ============================================================================
+ * =============================================================================
  */
 
 #include <linux/module.h>
-#include <linux/type.h>
+#include <linux/types.h>
 #include <linux/fs.h>
 #include <linux/errno.h>
 #include <linux/mm.h>
@@ -32,7 +32,7 @@
 #define MEM_CLEAR   0X1 /* 清零全局内存 */
 #define GLOBALMEM_MAJOR 254 /* 预设的globalmem的主设备号 */
 
-static globalmem_major = GLOBALMEM_MAJOR;
+static int globalmem_major = GLOBALMEM_MAJOR;
 /* globalmem 设备结构体 */
 struct globalmem_dev
 {
@@ -67,14 +67,14 @@ static ssize_t globalmem_read(struct file *filp, char __user *buf,
         *ppos += count;
         ret = count;
 
-        printk(KERN_INFO "read %d bytes from %d\n", count, p);
+        printk(KERN_INFO "read %d bytes from %lu\n", count, p);
     }
 
     return ret;
 }
 
 static ssize_t globalmem_write(struct file *filp, const char __user *buf,
-        ssize_t count, loff_t *ppos)
+        size_t count, loff_t *ppos)
 {
     unsigned long p = *ppos;
     int ret = 0;
@@ -97,13 +97,87 @@ static ssize_t globalmem_write(struct file *filp, const char __user *buf,
     }
     else
     {
-        *ppos + count;
+        *ppos += count;
         ret = count;
 
-        printk(KERN_INFO "written %d bytes from %d\n", count, p);
+        printk(KERN_INFO "written %d bytes from %lu\n", count, p);
     }
 
     return ret;
+}
+
+static loff_t globalmem_llseek(struct file *filp, loff_t offset, int orig)
+{
+    loff_t ret;
+    switch(orig)
+    {
+        case 0:     /* SEEK_SET 从文件开头开始偏移 */
+            if (offset < 0)
+            {
+                ret = - EINVAL;
+                break;
+            }
+            if ((unsigned int)offset > GLOBALMEM_SIZE)  /* 偏移越界 */
+            {
+                ret = - EINVAL;
+                break;
+            }
+            filp->f_pos = (unsigned int)offset;
+            ret = filp->f_pos;
+            break;
+
+        case 1:     /* SEEK_CUR 从文件当前位置开始偏移 */
+            if ((filp->f_pos + offset) > GLOBALMEM_SIZE)    /* 偏移越界 */
+            {
+                ret = - EINVAL;
+                break;
+            }
+            if ((filp->f_pos + offset) < 0)
+            {
+                ret = - EINVAL;
+                break;
+            }
+            filp->f_pos += offset;
+            ret = filp->f_pos;
+            break;
+
+        case 2:     /* SEEK_END 从文件结束位置开始偏移 */
+            if (offset > 0)
+            {
+                ret = - EINVAL;
+                break;
+            }
+            if ((filp->f_pos + offset) < 0)
+            {
+                ret = - EINVAL;
+                break;
+            }
+            filp->f_pos += offset;
+            ret = filp->f_pos;
+            break;
+
+        default:
+            ret = - EINVAL;
+            break;
+    }
+    return ret;
+}
+
+static long globalmem_ioctl(struct file *filp, unsigned int cmd, 
+        unsigned long arg)
+{
+    switch (cmd)
+    {
+        case MEM_CLEAR:
+            /* 清除全局内存 */
+            memset(dev.mem, 0, GLOBALMEM_SIZE);
+            printk(KERN_INFO "globalmem is set to zero\n");
+            break;
+
+        default:
+            return - EINVAL;    /* 其他不支持的命令 */
+    }
+    return 0;
 }
 
 static const struct file_operations globalmem_fops = 
@@ -112,11 +186,11 @@ static const struct file_operations globalmem_fops =
     .llseek = globalmem_llseek,
     .read = globalmem_read,
     .write = globalmem_write,
-    .ioctl = globalmem_ioctl,
+    .unlocked_ioctl = globalmem_ioctl,
 };
 
 /* 初始化并添加cdev结构体 */
-static void globalmem_setup_cdev()
+static void globalmem_setup_cdev(void)
 {
     int err, devno = MKDEV(globalmem_major, 0);
 
@@ -159,7 +233,7 @@ int globalmem_init(void)
 /* globalmem设备驱动模块卸载函数 */
 void globalmem_exit(void)
 {
-    cdev_del(&dev, cdev);   /*删除cdev结构 */
-    unregister_chrdev_region(MKDEV(globalmem_major, 0), 1); /* 注销这杯区域 */
+    cdev_del(&dev.cdev);   /*删除cdev结构 */
+    unregister_chrdev_region(MKDEV(globalmem_major, 0), 1); /* 注销这个区域 */
 }
 
