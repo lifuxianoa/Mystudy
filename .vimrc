@@ -424,6 +424,7 @@ set tags+=~/.vim/tags/libc.tags
 set tags+=~/.vim/tags/susv2.tags
 set tags+=~/.vim/tags/glib.tags
 set tags+=~/.vim/tags/cpp.tags
+set tags+=~/.vim/tags/linux-kernel.tags
 
 set completeopt=longest,menu
 
