@@ -5,3 +5,5 @@
 #忽略中间生成OBJ LIB文件
 *.[oa]
 .depend
+
+tags
