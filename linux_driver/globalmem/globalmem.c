@@ -33,7 +33,9 @@
 #define GLOBALMEM_MAJOR 254 /* 预设的globalmem的主设备号 */
 #define GLOBALMEM_NUM   2   /* 全局内存个数 */
 
-static atomic_t globalmem_available = ATOMIC_INIT(1);   /* 定义原子变量 */
+//static atomic_t globalmem_available = ATOMIC_INIT(1);   /* 定义原子变量 */
+static int globalmem_count = 0;    /* 定义文件打开次数计数 */
+static spinlock_t globalmem_lock;
 
 //static int globalmem_major = GLOBALMEM_MAJOR;
 static int globalmem_major = 0;
@@ -198,11 +200,23 @@ static int globalmem_open(struct inode *inode, struct file *filp)
     struct globalmem_dev *devp;
     printk(KERN_INFO "open: \n");
 
+#if 0
     if (!atomic_dec_and_test(&globalmem_available))
     {
         atomic_inc(&globalmem_available);
         return - EBUSY; /* 已经打开 */
     }
+#endif
+
+    spin_lock(&globalmem_lock);
+    if (globalmem_count)    /* 已经打开 */
+    {
+        spin_unlock(&globalmem_lock);
+        return - EBUSY;
+    }
+    globalmem_count++;  /* 增加使用计数 */
+    spin_unlock(&globalmem_lock);
+
     devp = container_of(inode->i_cdev, struct globalmem_dev, cdev);
     filp->private_data = devp;
 
@@ -212,8 +226,12 @@ static int globalmem_open(struct inode *inode, struct file *filp)
 /* 文件关闭函数 */
 static int globalmem_release(struct inode *inode, struct file *filp)
 {
+    spin_lock(&globalmem_lock);
+    globalmem_count++;  /* 减少使用计数 */
+    spin_unlock(&globalmem_lock);
+
     printk(KERN_INFO "release: \n");
-    atomic_inc(&globalmem_available);   /* 释放设备 */
+    //atomic_inc(&globalmem_available);   /* 释放设备 */
     return 0;
 }
 
@@ -280,6 +298,8 @@ int globalmem_init(void)
     {
         globalmem_setup_cdev(globalmem_devp + i, i);
     }
+
+    spin_lock_init(&globalmem_lock);
     return 0;
 
 fail_malloc:
