@@ -33,6 +33,8 @@
 #define GLOBALMEM_MAJOR 254 /* 预设的globalmem的主设备号 */
 #define GLOBALMEM_NUM   2   /* 全局内存个数 */
 
+static atomic_t globalmem_available = ATOMIC_INIT(1);   /* 定义原子变量 */
+
 //static int globalmem_major = GLOBALMEM_MAJOR;
 static int globalmem_major = 0;
 /* globalmem 设备结构体 */
@@ -196,6 +198,11 @@ static int globalmem_open(struct inode *inode, struct file *filp)
     struct globalmem_dev *devp;
     printk(KERN_INFO "open: \n");
 
+    if (!atomic_dec_and_test(&globalmem_available))
+    {
+        atomic_inc(&globalmem_available);
+        return - EBUSY; /* 已经打开 */
+    }
     devp = container_of(inode->i_cdev, struct globalmem_dev, cdev);
     filp->private_data = devp;
 
@@ -206,6 +213,7 @@ static int globalmem_open(struct inode *inode, struct file *filp)
 static int globalmem_release(struct inode *inode, struct file *filp)
 {
     printk(KERN_INFO "release: \n");
+    atomic_inc(&globalmem_available);   /* 释放设备 */
     return 0;
 }
 
