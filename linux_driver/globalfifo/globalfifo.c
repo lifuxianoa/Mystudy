@@ -24,6 +24,7 @@
 #include <linux/sched.h>
 #include <linux/init.h>
 #include <linux/cdev.h>
+#include <linux/poll.h>
 #include <asm/io.h>
 #include <asm/system.h>
 #include <asm/uaccess.h>
@@ -36,7 +37,7 @@
 //static atomic_t globalfifo_available = ATOMIC_INIT(1);   /* 定义原子变量 */
 //static int globalfifo_count = 0;    /* 定义文件打开次数计数 */
 //static spinlock_t globalfifo_lock;
-static DECLARE_MUTEX(globalfifo_lock);   /* 定义互斥锁/信号量 */
+//static DECLARE_MUTEX(globalfifo_lock);   /* 定义互斥锁/信号量 */
 
 //static int globalfifo_major = GLOBALFIFO_MAJOR;
 static int globalfifo_major = 0;
@@ -295,11 +296,13 @@ static int globalfifo_open(struct inode *inode, struct file *filp)
     spin_unlock(&globalfifo_lock);
 #endif
 
+#if 0
     /* 获得信号量 */
     if (down_trylock(&globalfifo_lock))
     {
         return - EBUSY;
     }
+#endif
 
     devp = container_of(inode->i_cdev, struct globalfifo_dev, cdev);
     filp->private_data = devp;
@@ -316,10 +319,37 @@ static int globalfifo_release(struct inode *inode, struct file *filp)
     spin_unlock(&globalfifo_lock);
 #endif
 
-    up(&globalfifo_lock);    /* 释放信号量 */
+    //up(&globalfifo_lock);    /* 释放信号量 */
     printk(KERN_INFO "release: \n");
     //atomic_inc(&globalfifo_available);   /* 释放设备 */
     return 0;
+}
+
+static unsigned int globalfifo_poll(struct file *filp, 
+        struct poll_table_struct *wait)
+{
+    unsigned int mask = 0;
+    struct globalfifo_dev *devp = filp->private_data;
+
+    down(&devp->sem);
+
+    poll_wait(filp, &devp->r_wait, wait);
+    poll_wait(filp, &devp->w_wait, wait);
+
+    /* FIFO非空 */
+    if (devp->current_len > 0)
+    {
+        mask |= POLLIN | POLLRDNORM;    /* 表示数据可获得 */
+    }
+
+    /* FIFO非满 */
+    if (devp->current_len < GLOBALFIFO_SIZE)
+    {
+        mask |= POLLOUT | POLLRDNORM;   /* 表示数据可写 */
+    }
+
+    up(&devp->sem);
+    return mask;
 }
 
 static const struct file_operations globalfifo_fops = 
@@ -329,6 +359,7 @@ static const struct file_operations globalfifo_fops =
     .read = globalfifo_read,
     .write = globalfifo_write,
     .unlocked_ioctl = globalfifo_ioctl,
+    .poll = globalfifo_poll,
     .open = globalfifo_open,
     .release = globalfifo_release,
 };
