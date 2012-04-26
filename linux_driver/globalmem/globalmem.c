@@ -45,6 +45,7 @@ struct globalmem_dev
 {
     struct cdev cdev;   /* cdev结构体 */
     unsigned char mem[GLOBALMEM_SIZE];  /* 全局内存 */
+    struct semaphore sem;   /* 读写时并发控制用的信号量 */
 } *globalmem_devp;
 
 static ssize_t globalmem_read(struct file *filp, char __user *buf, 
@@ -66,6 +67,11 @@ static ssize_t globalmem_read(struct file *filp, char __user *buf,
         count = GLOBALMEM_SIZE - p;
     }
 
+    if (down_interruptible(&devp->sem)) /* 获得信号量 */
+    {
+        return - ERESTARTSYS;
+    }
+
     /* 内核空间->用户空间 */
     if (copy_to_user(buf, (void *)(devp->mem + p), count))
     {
@@ -78,6 +84,8 @@ static ssize_t globalmem_read(struct file *filp, char __user *buf,
 
         printk(KERN_INFO "read %d bytes from %lu\n", count, p);
     }
+
+    up(&devp->sem);     /* 释放信号量 */
 
     return ret;
 }
@@ -101,6 +109,11 @@ static ssize_t globalmem_write(struct file *filp, const char __user *buf,
         count = GLOBALMEM_SIZE - p;
     }
 
+    if (down_interruptible(&devp->sem)) /* 获得信号量 */
+    {
+        return - ERESTARTSYS;
+    }
+
     /* 用户空间->内核空间 */
     if (copy_from_user((void *)(devp->mem + p), buf, count))
     {
@@ -113,6 +126,7 @@ static ssize_t globalmem_write(struct file *filp, const char __user *buf,
 
         printk(KERN_INFO "written %d bytes to %lu\n", count, p);
     }
+    up(&devp->sem);     /* 释放信号量 */
 
     return ret;
 }
@@ -183,8 +197,14 @@ static long globalmem_ioctl(struct file *filp, unsigned int cmd,
     switch (cmd)
     {
         case MEM_CLEAR:
+            if (down_interruptible(&devp->sem)) /* 获得信号量 */
+            {
+                return - ERESTARTSYS;
+            }
+
             /* 清除全局内存 */
             memset(devp->mem, 0, GLOBALMEM_SIZE);
+            up(&devp->sem);     /* 释放信号量 */
             printk(KERN_INFO "globalmem is set to zero\n");
             break;
 
@@ -308,6 +328,7 @@ int globalmem_init(void)
 
     for (i = 0; i < GLOBALMEM_NUM; i++)
     {
+        init_MUTEX(&globalmem_devp[i].sem);
         globalmem_setup_cdev(globalmem_devp + i, i);
     }
 
