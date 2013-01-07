@@ -1,0 +1,18 @@
+LIBA = libstatic.a  
+AR = ar  
+CC = gcc  
+CPPFLAGS =  
+CFLAGS = -O2  
+COMPILE = $(CC) $(CPPFLAGS) $(CFLAGS) -c  
+SRCS := $(wildcard *.c)  
+OBJS := $(patsubst %.c,%.o,$(SRCS))  
+all:$(LIBA)  
+$(LIBA):$(OBJS)  
+    $(AR) cqs $(LIBA) $(OBJS)  
+%.o:%.c  
+    $(COMPILE) $< -o $@  
+.PHONY:clean distclean  
+clean:  
+    rm -f $(OBJS)  
+distclean:  
+    rm -f $(OBJS) $(LIBA)  

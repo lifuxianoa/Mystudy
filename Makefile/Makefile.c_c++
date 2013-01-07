@@ -1,0 +1,34 @@
+PRGM = zztest  
+LIBDIR = ../../lib  
+APPLIB = applogic  
+APPLIBSO = lib$(APPLIB).so  
+CC = gcc  
+CPPFLAGS =  
+CFLAGS = -Wall -g `pkg-config --cflags glib-2.0`  
+CCOMPILE = $(CC) $(CPPFLAGS) $(CFLAGS) -c  
+CXX = g++  
+CXXFLAGS = -Wall -g `pkg-config --cflags glib-2.0`  
+CXXCOMPILE = $(CXX) $(CXXFLAGS) -c  
+LDFLAGS = `pkg-config --libs glib-2.0` -L$(LIBDIR) -l$(APPLIB) -lcppunit -ldl -lpthread  
+LINKCXX = $(CXX) $(LDFLAGS)  
+CSRCS := $(wildcard *.)  
+COBJS := $(patsubst %.c,%.o,$(CSRCS))  
+CXXSRCS := $(wildcard *.cpp)  
+CXXOBJS := $(patsubst %.cpp,%.o,$(CXXSRCS))  
+OBJS = $(COBJS) $(CXXOBJS)  
+
+all:$(PRGM)  
+	ln -s $(LIBDIR)/$(APPLIBSO)  
+
+$(PRGM):$(OBJS)  
+	$(LINKCXX) $(OBJS) -o $(PRGM)  
+
+%.o:%.c  
+	$(CCOMPILE) $< -o $@  
+
+%o:%.cpp  
+	$(CXXCOMPILE) $< -o $@  
+
+.PHONY:clean  
+clean:  
+	rm -f $(OBJS) $(PRGM) $(APPLIBSO) core* tmp*  

@@ -1,0 +1,32 @@
+CC = gcc  
+CFLAGS = -Wall -O2 `pkg-config --cflags glib-2.0`  
+LIBCFLAGS = $(CFLAGS) -D_REENTRANT -fPIC  
+LIBSRCS := $(wildcard *.c)  
+LIBOBJS := $(patsubst %.c,%.o,$(LIBSRCS))  
+LIBRARY = libpustation.so.1.0.0  
+SONAME = libpustation.so.1  
+LIBNAME = libpustation.so  
+APPLIB = applogic  
+APPLIBSO = $(APPLIB).so  
+APPLIBDIR = ../lib  
+APPLIBNAME = lib$(APPLIBSO)
+
+all:$(LIBRARY)
+	cp $(LIBNAME) $(APPLIBDIR)/$(APPLIBNAME)  
+	cp $(LIBNAME) $(APPLIBDIR)/$(APPLIBSO)  
+
+$(LIBRARY):$(LIBOBJS)  
+	$(CC) -shared -W1,-soname,$(SONAME) $(LIBOBJS) -o $@  
+	ln -sf $@ $(LIBNAME)  
+	ln -sf $@ $(SONAME)  
+
+$(LIBOBJS):%.o:%.c  
+	$(CC) $(LIBCFLAGS) -c $< -o $@  
+
+.PHONY:clean distclean  
+
+clean:  
+	rm -f $(LIBOBJS)  
+
+distclean:  
+	rm -f $(LIBOBJS) $(LIBRARY) $(SONAME) $(LIBNAME) $(APPLIBDIR)/$(APPLIBNAME) $(APPLIBDIR)/$(APPLIBSO)  
