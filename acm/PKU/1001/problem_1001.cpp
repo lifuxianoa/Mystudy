@@ -54,12 +54,6 @@ void large_comp(const vector<unsigned int>&a, vector<unsigned int>&result, unsig
                 result.resize(a.size() + b.size() - 1, 0);
 
                 large_mult(a, b, result);
-
-                for (j = 0; j < result.size(); j++)
-                {
-                    cout << result[j];
-                }
-                cout << endl;
             }
         }
     }
@@ -73,6 +67,7 @@ int main()
     unsigned int n;
     vector<unsigned int> a;
     vector<unsigned int> result;
+    size_t position = 0;
 
     while (cin >> s >> n)
     {
@@ -80,11 +75,37 @@ int main()
         result.clear();
         a.clear();
         a.reserve(s.size());
+
+        //remove last zero
+        position = s.find_first_of('.');
+        if (position < s.size())
+        {
+            position = s.find_last_not_of('0');
+            if (position != s.size() - 1)
+            {
+                if ('.' == s[position])
+                {
+                    s.erase(position, s.size() - position);
+                }
+                else
+                {
+                    s.erase(position + 1, s.size() - position - 1);
+                }
+            }
+        }
+
+        //remove zero at the beginning
+        position = s.find_first_not_of('0');
+        if (position != 0)
+        {
+            s.erase(0, position);
+        }
+
         for (i=0; i<s.size(); i++)
         {
             if ('.' == s[i])
             {
-                point_len = a.size();
+                point_len = s.size() - a.size() - 1;
                 continue;
             }
             else if ( a.size() == 0 && s[i] == '0')
@@ -94,27 +115,21 @@ int main()
 
             a.push_back(s[i] - '0');
         }
-
-        while (a[a.size() - 1] == 0)
+        if (0 == a.size())
         {
-            a.pop_back();
+            a.push_back(0);
         }
 
-        point_len = a.size() - point_len;
-        cout << "point_len=" << point_len << endl;
-        cout << "a: ";
-        for (i=0; i<a.size(); i++)
+        if (0 == n)
         {
-            cout << a[i];
+            cout << 1 << endl;
+            continue;
         }
-        cout << endl;
 
         large_comp(a, result, n);
 
         point_len *= n;
         //delete addtional zero at the end.
-        cout << "point_len=" << point_len << endl;
-        cout << "result.size=" << result.size() << endl;
         j = result.size() - point_len - 1;
         for (i = result.size() - 1; i > j; i--)
         {
