@@ -26,7 +26,7 @@
 struct SData
 {
     unsigned char value;
-    unsigned int count;
+    unsigned int len;
 };
 
 struct SImage
@@ -35,128 +35,30 @@ struct SImage
     struct SData data[MAX_PAIR];
 };
 
-unsigned char get_value(struct SImage *img, unsigned int i, unsigned int j, int width)
+struct SImage input;
+unsigned int line = 0;
+unsigned int sum = 0;
+
+unsigned char get_value(unsigned int pos)
 {
-    unsigned int index = i * width + j, count = 0;
-    int k;
-    for( k = 0; k < MAX_PAIR; k++ )
+    int i, curpos = 0;
+
+    for( i = 0; i < line; i++)
     {
-        count += img->data[k].count;
-        if (count > index)
+        if( pos >= curpos && pos < curpos + input.data[i].len)
         {
-            break;
+            return input.data[i].value;
         }
+        curpos += input.data[i].len;
     }
-
-    //printf("value[%u][%u]=%d\n", i, j, img->data[k].value);
-    return img->data[k].value;
-}
-
-unsigned char get_max(struct SImage *img, unsigned int i, unsigned int j, int width)
-{
-    unsigned char ret_val = 0, value, value_comp, abs_val;
-    unsigned int max_line = 0, k;
-    for( k = 0; k < MAX_PAIR; k++ )
-    {
-        if( 0 == img->data[k].count)
-        {
-            break;
-        }
-        max_line += img->data[k].count;
-    }
-    max_line /= width;
-
-    value = get_value(img, i, j, width);
-
-    if (i >= 1)
-    {
-        if (j >= 1)
-        {
-            value_comp = get_value(img, i - 1, j - 1, width);
-            abs_val = abs(value - value_comp);
-            if( abs_val > ret_val )
-            {
-                ret_val = abs_val;
-            }
-        }
-
-        value_comp = get_value(img, i - 1, j, width);
-        abs_val = abs(value - value_comp);
-        if( abs_val > ret_val )
-        {
-            ret_val = abs_val;
-        }
-
-        if (j + 1 < width)
-        {
-            value_comp = get_value(img, i - 1, j + 1, width);
-            abs_val = abs(value - value_comp);
-            if( abs_val > ret_val )
-            {
-                ret_val = abs_val;
-            }
-        }
-    }
-
-    if (j >= 1)
-    {
-        value_comp = get_value(img, i, j - 1, width);
-        abs_val = abs(value - value_comp);
-        if( abs_val > ret_val )
-        {
-            ret_val = abs_val;
-        }
-    }
-
-    if (j + 1 < width)
-    {
-        value_comp = get_value(img, i, j + 1, width);
-        abs_val = abs(value - value_comp);
-        if( abs_val > ret_val )
-        {
-            ret_val = abs_val;
-        }
-    }
-
-    if (i + 1 < max_line)
-    {
-        if (j >= 1)
-        {
-            value_comp = get_value(img, i + 1, j - 1, width);
-            abs_val = abs(value - value_comp);
-            if( abs_val > ret_val )
-            {
-                ret_val = abs_val;
-            }
-        }
-
-        value_comp = get_value(img, i + 1, j, width);
-        abs_val = abs(value - value_comp);
-        if( abs_val > ret_val )
-        {
-            ret_val = abs_val;
-        }
-
-        if (j + 1 < width)
-        {
-            value_comp = get_value(img, i + 1, j + 1, width);
-            abs_val = abs(value - value_comp);
-            if( abs_val > ret_val )
-            {
-                ret_val = abs_val;
-            }
-        }
-    }
-
-    return ret_val;
+    return 0;
 }
 
 int main(int argc, char *argv[])
 {
-    struct SImage input;
-    unsigned int width = 0;
     unsigned int value = 0;
-    unsigned int count = 0;
+    unsigned int len = 0;
+    unsigned int width;
 
     while(scanf("%d", &width))
     {
@@ -168,51 +70,19 @@ int main(int argc, char *argv[])
         memset(&input, 0, sizeof(input));
         input.width = width;
         
-        unsigned int line = 0;
-        unsigned int max_line = 0;
-        while(scanf("%u%u", &value, &count))
+        while(scanf("%u%u", &value, &len))
         {
-            if(0 == count)
+            if(0 == len)
             {
                 break;
             }
             input.data[line].value = value;
-            input.data[line].count = count;
+            input.data[line].len = len;
             line++;
-            max_line += count;
+            sum += len;
         }
 
-        unsigned char val = 0, val_last = 0;
-        unsigned int i, j, val_count = 1;
-        max_line /= width;
-        printf("%d\n", width);
-        for( i= 0; i < max_line; i++ )
-        {
-            for( j = 0; j < width; j++ )
-            {
-                val = get_max(&input, i, j, width);
-                //printf("i:%d, j:%d,val=%d,", i, j, val);
-                if(0 == i && 0 == j)
-                {
-                    val_last = val;
-                    continue;
-                }
-                if( val == val_last )
-                {
-                    val_count++;
-                }
-                else if( 0 != val_count )
-                {
-                    printf("%d %u\n", (int)val_last, val_count);
-                    val_count = 1;
-                }
-                val_last = val;
-                //printf("val_count=%d\n", val_count);
-            }
-        }
-        printf("%d %u\n0 0", (int)val_last, val_count);
     }
-    printf("0\n");
 
     return 0;
 }

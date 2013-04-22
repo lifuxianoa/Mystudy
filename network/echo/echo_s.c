@@ -25,7 +25,7 @@ int main(void)
     bzero(&servaddr, sizeof(struct sockaddr_in));
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port = htons(13);
+    servaddr.sin_port = htons(1333);
 
     bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
     listen(listenfd, 10);

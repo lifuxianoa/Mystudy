@@ -24,17 +24,16 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    bzero(&servaddr, sizeof(struct sockaddr_in));
+    //strcpy(buff, "192.168.61.171");
+    servaddr.sin_family = AF_INET;
+    //inet_pton(AF_INET, buff, &servaddr.sin_addr);
+    inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
+    servaddr.sin_port = htons(1333);
+
     for(i=0; i<MAXCLI; i++)
     {
         clifd[i] = socket(AF_INET, SOCK_STREAM, 0);
-
-        bzero(&servaddr, sizeof(struct sockaddr_in));
-        //strcpy(buff, "192.168.61.171");
-        servaddr.sin_family = AF_INET;
-        //inet_pton(AF_INET, buff, &servaddr.sin_addr);
-        inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
-        servaddr.sin_port = htons(13);
-
         connect(clifd[i], (struct sockaddr*)&servaddr, sizeof(servaddr));
     }
     /*

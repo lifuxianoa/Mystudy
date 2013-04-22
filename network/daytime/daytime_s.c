@@ -16,15 +16,25 @@ int main(void)
 	char buff[100];
 	time_t ticks;
 	socklen_t len;
+    int ret = 0;
 
 	listenfd = socket(AF_INET, SOCK_STREAM, 0);
 	bzero(&servaddr, sizeof(struct sockaddr_in));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	servaddr.sin_port = htons(13);
+	servaddr.sin_port = htons(1333);
 
-	bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
-	listen(listenfd, 10);
+	ret = bind(listenfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
+    if( -1 == ret )
+    {
+        perror("bind failed\n");
+    }
+
+    ret = listen(listenfd, 10);
+    if( -1 == ret)
+    {
+        perror("listen failed\n");
+    }
 
 	for(;;)
 	{
