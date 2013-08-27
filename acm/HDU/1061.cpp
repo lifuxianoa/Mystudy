@@ -13,12 +13,19 @@ int getNumber(unsigned int x, unsigned int y)
 {
 	int res = 1;
 	x %= 10;
+	if (x == 0) {
+		return 0;
+	}
+	else if (x == 1) {
+		return 1;
+	}
+
 	if (y >= 2) {
 		if ((y % 2) == 1) {
 			res *= x;
 		}
 		y /= 2;
-		return (res*getNumber(x * x, y))%10;
+		return (res*getNumber((x * x) % 10, y))%10;
 	}
 	else
 	{
@@ -29,7 +36,7 @@ int getNumber(unsigned int x, unsigned int y)
 int main()
 {
 	freopen("in.txt", "r", stdin);
-	//freopen("out.txt", "w", stdout);
+	freopen("out.txt", "w", stdout);
 	int n = 0;
 	unsigned int digit = 0;
 
@@ -42,5 +49,5 @@ int main()
 	}
 
 	fclose(stdin);
-	//fclose(stdout);
+	fclose(stdout);
 }
