@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include<algorithm>
+#include <string.h>
 
 using namespace std;
 
@@ -17,16 +17,14 @@ int main()
 
 	while(scanf("%d", &n) != EOF && n != 0)
 	{
-		printf("xxxx%d\n", n);
 		max = 0;
 		memset(a, 0, sizeof(a));
-		for (int i = 0; i < MAXN; ++i) {
-			f[i] = 1;
-		}
+		memset(f, 0, sizeof(f));
 
 		for (int i = 0; i < n; ++i) {
 			scanf("%d", &value);
 			a[i] = value;
+			f[i] = value;
 			for (int j = 0; j < i; ++j) {
 				if (a[j] < value) {
 					if (f[j] + value > f[i]) {
@@ -35,12 +33,11 @@ int main()
 				}
 			}
 			if (max < f[i]) {
-				f[i] = max;
+				max = f[i];
 			}
 		}
 		printf("%d\n", max);
 	}
-
 
 	fclose(stdin);
 	return 0;
